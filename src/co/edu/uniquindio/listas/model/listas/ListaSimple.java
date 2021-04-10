@@ -1,6 +1,8 @@
 package co.edu.uniquindio.listas.model.listas;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 
 
@@ -288,6 +290,17 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 		return lista;
 	}
 	
+	public Collection<T> creadorTablas() {
+		Collection<T> lista = new ArrayList<>();
+		
+		Nodo<T> aux = nodoPrimero;
+		
+		while(aux!=null) {
+			lista.add(aux.getValorNodo());
+			aux = aux.getSiguienteNodo();			
+		}
+		return lista;
+	}
 	
 	//Metodos get y set de la clase ListaSimple
 	
@@ -311,7 +324,7 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 		this.tamanio = tamaño;
 	}
 
-
+	
 
 	
 	

@@ -3,9 +3,11 @@ package co.edu.uniquindio.listas.model;
 import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+
 import co.edu.uniquindio.listas.model.listas.ListaSimple;
 
-public class Contenedor implements Serializable {
+public class Contenedor extends RecursiveTreeObject<Contenedor> implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private String identificacionContenedor;
@@ -49,4 +51,30 @@ public class Contenedor implements Serializable {
         // nextInt regresa en rango pero con límite superior exclusivo, por eso sumamos 1
         return ThreadLocalRandom.current().nextInt(minimo, maximo + 1);
     }
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((identificacionContenedor == null) ? 0 : identificacionContenedor.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Contenedor other = (Contenedor) obj;
+		if (identificacionContenedor == null) {
+			if (other.identificacionContenedor != null)
+				return false;
+		} else if (!identificacionContenedor.equals(other.identificacionContenedor))
+			return false;
+		return true;
+	}
+
 }

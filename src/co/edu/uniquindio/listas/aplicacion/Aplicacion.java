@@ -1,14 +1,19 @@
 package co.edu.uniquindio.listas.aplicacion;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import co.edu.uniquindio.listas.vistas.ControladorVistaPrincipal;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -63,6 +68,7 @@ public class Aplicacion extends Application {
 			Scene scene = new Scene(vistaIndex);
 			escenarioPrincipal.setScene(scene);
 			escenarioPrincipal.show();
+			ControladorVistaPrincipal miControlador = loader.getController();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
@@ -80,6 +86,34 @@ public class Aplicacion extends Application {
 			System.out.println(e.getMessage());
 		}
 	}
+	
+	public static String mostrarFileChooserSave() {
+			String ruta = "";
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.getExtensionFilters().addAll(new ExtensionFilter("DAT", "*.dat"));
+	        fileChooser.setTitle("Elegir ruta");
+
+	        File file = fileChooser.showSaveDialog(escenarioPrincipal);
+	        
+	        if(file != null) {
+	        	ruta = file.getAbsolutePath();
+	        }
+	        return ruta;
+	}
+	
+	public static String mostrarFileChooserOpen() {
+		String ruta = "";
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().addAll(new ExtensionFilter("DAT", "*.dat"));
+        fileChooser.setTitle("Elegir ruta");
+
+        File file = fileChooser.showOpenDialog(escenarioPrincipal);
+        
+        if(file != null) {
+        	ruta = file.getAbsolutePath();
+        }
+        return ruta;
+}
 
 //	public static void mostrarVistaAdmin() {
 //		try {
