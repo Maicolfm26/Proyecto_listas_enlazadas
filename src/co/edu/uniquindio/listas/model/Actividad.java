@@ -12,6 +12,9 @@ public class Actividad implements Serializable {
 	private Requerida requerida;
 	private Cola<Tarea> listaTareas;
 	
+	public Actividad() {
+	}
+	
 	public Actividad(String nombre, String descripcion, Requerida requeria) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;

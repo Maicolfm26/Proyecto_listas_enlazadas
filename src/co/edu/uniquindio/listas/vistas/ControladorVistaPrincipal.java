@@ -1,112 +1,163 @@
 package co.edu.uniquindio.listas.vistas;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import com.jfoenix.controls.JFXTabPane;
-
 import co.edu.uniquindio.listas.aplicacion.Aplicacion;
 import co.edu.uniquindio.listas.controller.ModelFactoryController;
-import co.edu.uniquindio.listas.model.Contenedor;
+import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.model.Proceso;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.SingleSelectionModel;
-import javafx.scene.control.Tab;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.FileChooser;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class ControladorVistaPrincipal implements Initializable {
 
 	ModelFactoryController singleton;
 	@FXML
-	private JFXTabPane tabPane;
+	private TableView<Proceso> tablaProcesos;
+
 	@FXML
-	private TableView<Contenedor> tablaContenedor;
+	private TableColumn<Proceso, String> idColumn;
+
 	@FXML
-	private TableColumn<Contenedor, String> identificacionColumn;
-	private final ObservableList<Contenedor> listadoContenedor = FXCollections.observableArrayList();
+	private TableColumn<Proceso, String> nombreColumn;
+
+	private final ObservableList<Proceso> listadoProcesos = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		singleton = ModelFactoryController.getInstance();
-		identificacionColumn.setCellValueFactory(new PropertyValueFactory<>("IdentificacionContenedor"));
-		// adicionar los datos a la tabla
-		listadoContenedor.addAll(singleton.getlistaContenedores());
-		tablaContenedor.setItems(listadoContenedor);
+		idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
+		nombreColumn.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
 	}
 
 	@FXML
-	private void mostrarVistaListaEnlazadas() {
-		Aplicacion.mostrarVistaListasEnlazadas();
+	private void actualizarTabla() {
+		listadoProcesos.addAll(singleton.getListadoProcesos().creadorTablas());
+		tablaProcesos.setItems(listadoProcesos);
 	}
 
 	@FXML
-	private void crearContenedor() {
-		Contenedor contenedor = new Contenedor();
-		tablaContenedor.getItems().add(contenedor);
-		singleton.crearContenedor(contenedor);
-	}
-
-	@FXML
-	private void eliminarContenedor() {
-		if (tablaContenedor.getSelectionModel().getSelectedIndex() >= 0) {
-			if (Aplicacion.mostrarMensajeRespuesta(AlertType.WARNING, "Eliminar contenedor",
-					"Estas seguro que deseas eliminar el contenedor")) {
-				int seleccion = tablaContenedor.getSelectionModel().getSelectedIndex();
-				Contenedor contenedor = tablaContenedor.getSelectionModel().getSelectedItem();
-				tablaContenedor.getItems().remove(seleccion);
-				singleton.eliminarContenedor(contenedor);
-			}
-		} else {
-			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun contenedor");
-		}
-	}
-
-	@FXML
-	private void guardarContenedor() {
-		if (tablaContenedor.getSelectionModel().getSelectedIndex() >= 0) {
-			Contenedor contenedor = tablaContenedor.getSelectionModel().getSelectedItem();
-			String ruta = Aplicacion.mostrarFileChooserSave();
-			if (ruta != "") {
-				try {
-					singleton.guardarContenedor(contenedor, ruta);
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		} else {
-			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun contenedor");
-		}
-		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-		selectionModel.select(0);
-	}
-
-	@FXML
-	private void cargarContenedor() {
+	private void abrirContenedor(ActionEvent event) {
 		String ruta = Aplicacion.mostrarFileChooserOpen();
 		if (ruta != "") {
 			try {
-				Contenedor contenedor = singleton.cargarContenedor(ruta);
-				tablaContenedor.getItems().add(contenedor);
+				singleton.cargarContenedor(ruta);
+				actualizarTabla();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", "Error al cargar el archivo");
 			}
 		}
-		SingleSelectionModel<Tab> selectionModel = tabPane.getSelectionModel();
-		selectionModel.select(0);
 	}
 
+	@FXML
+	private void crearContenedor(ActionEvent event) {
+		singleton = singleton.nuevoContenedor();
+		listadoProcesos.clear();
+		tablaProcesos.getItems().clear();
+		actualizarTabla();
+	}
+
+	@FXML
+	private void guardarContenedor(ActionEvent event) {
+		String ruta = Aplicacion.mostrarFileChooserSave();
+		if (ruta != "") {
+			try {
+				singleton.guardarContenedor(ruta);
+			} catch (IOException e) {
+				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", "Error al guardar el archivo");
+			}
+		}
+
+	}
+
+	@FXML
+	private void pulsadoNuevo() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Aplicacion.class.getResource("../vistas/guardarProcesoVista.fxml"));
+			AnchorPane vistaRegistro = (AnchorPane) loader.load();
+			Scene scene = new Scene(vistaRegistro);
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Crear proceso");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(Aplicacion.escenarioPrincipal);
+			dialogStage.setScene(scene);
+			// Acceso al controlador.
+			ControladorVistaGuardarProceso miControlador = loader.getController();
+			miControlador.setEscenario(dialogStage);
+			dialogStage.showAndWait();
+			if (miControlador.isOkClicked()) {
+				tablaProcesos.getItems().add(miControlador.getProceso());
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	@FXML
+	private void pulsadoEditarProceso() {
+		int posicion = tablaProcesos.getSelectionModel().getSelectedIndex();
+		if (posicion >= 0) {
+			try {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(Aplicacion.class.getResource("../vistas/editarProcesoVista.fxml"));
+				AnchorPane vistaRegistro = (AnchorPane) loader.load();
+				Scene scene = new Scene(vistaRegistro);
+				Stage dialogStage = new Stage();
+				dialogStage.setTitle("Editar cuestionario");
+				dialogStage.initModality(Modality.WINDOW_MODAL);
+				dialogStage.initOwner(Aplicacion.escenarioPrincipal);
+				dialogStage.setScene(scene);
+				// Acceso al controlador.
+				ControladorVistaEditarProceso miControlador = loader.getController();
+				miControlador.setEscenario(dialogStage);
+				miControlador.setProceso(tablaProcesos.getSelectionModel().getSelectedItem());
+				miControlador.actualizarCampos();
+				dialogStage.showAndWait();
+				if (miControlador.isOkClicked()) {
+					tablaProcesos.getItems().set(posicion, miControlador.getProcesoActualizado());
+				}
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+		} else {
+			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun proceso");
+		}
+	}
+
+	@FXML
+	private void eliminarProceso() {
+		if (tablaProcesos.getSelectionModel().getSelectedIndex() >= 0) {
+			if (Aplicacion.mostrarMensajeRespuesta(AlertType.WARNING, "Eliminar proceso",
+					"Estas seguro que deseas eliminar el proceso")) {
+				int seleccion = tablaProcesos.getSelectionModel().getSelectedIndex();
+				if (seleccion >= 0) {
+					Proceso proceso = tablaProcesos.getSelectionModel().getSelectedItem();
+					tablaProcesos.getItems().remove(seleccion);
+					singleton.eliminarProceso(proceso);
+				}
+			}
+		} else {
+			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun proceso");
+		}
+	}
+
+	@FXML
+	private void editarProceso() {
+
+	}
 }

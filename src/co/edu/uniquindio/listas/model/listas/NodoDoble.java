@@ -22,6 +22,10 @@ public class NodoDoble<T> implements Serializable {
 	 * Constructor de la clase Nodo
 	 * @param dato Elemento que se guarda en el Nodo
 	 */
+	
+	public NodoDoble() {
+	}
+	
 	public NodoDoble(T valorNodo) {
 		this.valorNodo = valorNodo;
 	}

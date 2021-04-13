@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.util.Optional;
 import co.edu.uniquindio.listas.vistas.ControladorVistaPrincipal;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
@@ -19,7 +19,7 @@ import javafx.stage.StageStyle;
 
 public class Aplicacion extends Application {
 
-	private static Stage escenarioPrincipal;
+	public static Stage escenarioPrincipal;
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -64,7 +64,7 @@ public class Aplicacion extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Aplicacion.class.getResource("../vistas/VistaPrincipal.fxml"));
-			AnchorPane vistaIndex = (AnchorPane) loader.load();
+			StackPane vistaIndex = (StackPane) loader.load();
 			Scene scene = new Scene(vistaIndex);
 			escenarioPrincipal.setScene(scene);
 			escenarioPrincipal.show();

@@ -21,8 +21,13 @@ public class Nodo<T> implements Serializable {
 	 * Constructor de la clase Nodo
 	 * @param dato Elemento que se guarda en el Nodo
 	 */
+	
+	public Nodo() {
+	}
+	
 	public Nodo(T valorNodo) {
 		this.valorNodo = valorNodo;
+		this.siguienteNodo = null;
 	}
 	
 	

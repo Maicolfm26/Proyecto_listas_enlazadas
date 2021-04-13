@@ -2,20 +2,22 @@ package co.edu.uniquindio.listas.controller;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collection;
 
+import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
 import co.edu.uniquindio.listas.model.Contenedor;
+import co.edu.uniquindio.listas.model.Proceso;
 import co.edu.uniquindio.listas.model.listas.ListaSimple;
 import co.edu.uniquindio.listas.persistencia.Persistencia;
 
 public class ModelFactoryController {
 
 	private static ModelFactoryController instancia;
-	private ListaSimple<Contenedor> listaContenedores;
+	private Contenedor contenedor;
 
 	private ModelFactoryController() {
-		if (listaContenedores == null) {
-			listaContenedores = new ListaSimple<Contenedor>();
+		if (contenedor == null) {
+			contenedor = new Contenedor();
 		}
 	}
 
@@ -25,34 +27,35 @@ public class ModelFactoryController {
 		}
 		return instancia;
 	}
+	
+	public void guardarContenedor(String rutaArchivo) throws FileNotFoundException, IOException {
+		Persistencia.guardarRecursoContenedorBinario(contenedor, rutaArchivo);
+	}
+	
+	public void cargarContenedor(String ruta) throws IOException {
+		contenedor = Persistencia.cargarRecursoContenedorBinario(ruta);
+	}
+	
+	public ListaSimple<Proceso> getListadoProcesos() {
+		return contenedor.getListaProcesos();
+	}
 
-	public Collection<Contenedor> getlistaContenedores() {
-		return listaContenedores.creadorTablas();
+	public void agregarProceso(Proceso proceso) throws YaExisteProcesoException {
+		contenedor.agregarProceso(proceso);
+	}
+	
+	public ModelFactoryController nuevoContenedor() {
+		instancia = null;
+		contenedor = null;
+		return getInstance();
 	}
 
-	public void crearContenedor(Contenedor contenedor) {
-		listaContenedores.agregarfinal(contenedor);
+	public void eliminarProceso(Proceso proceso) {
+		contenedor.eliminarProceso(proceso);
+	}
+
+	public void editarProceso(Proceso proceso, Proceso procesoActualizado) throws ProcesoNoExisteException {
+		contenedor.editarProceso(proceso, procesoActualizado);
 	}
 	
-	public void eliminarContenedor(Contenedor contenedor) {
-		listaContenedores.eliminar(contenedor);
-	}
-	
-	public void guardarContenedor(Contenedor contenedor, String rutaArchivo) throws FileNotFoundException, IOException {
-		Persistencia.guardarRecursoContenedorXML(contenedor, rutaArchivo);
-	}
-	
-	public Contenedor cargarContenedor(String ruta) throws IOException {
-		Contenedor contenedor = Persistencia.cargarRecursoContenedorXML(ruta);
-		listaContenedores.agregarfinal(contenedor);
-		return contenedor;
-	}
-//	public void guardarRecursoBinario(String rutaArchivo) throws FileNotFoundException, IOException {
-//		System.out.println("Guardando..");
-//		Persistencia.guardarRecursoContenedorBinario(contenedor, rutaArchivo);
-//	}
-//	
-//	public void cargarRecursoBinario(String rutaArchivo) {
-//		contenedor = Persistencia.cargarRecursoContenedorBinario(rutaArchivo);
-//	}
 }

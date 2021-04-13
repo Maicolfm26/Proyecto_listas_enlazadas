@@ -9,6 +9,9 @@ public class Tarea implements Serializable {
 	private Requerida requerida;
 	private int duracion;
 	
+	public Tarea() {
+	}
+	
 	public Tarea(String descripcion, Requerida requerida, int duracion) {
 		this.descripcion = descripcion;
 		this.requerida = requerida;
