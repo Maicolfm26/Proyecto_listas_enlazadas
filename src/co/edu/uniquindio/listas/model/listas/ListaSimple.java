@@ -180,19 +180,6 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 		return null;
 	}
 
-	private Nodo<T> obtenerNodo(T valor) {
-
-		Nodo<T> nodo = nodoPrimero;
-
-		while (nodo != null) {
-			if (nodo.getValorNodo().equals(valor)) {
-				return nodo;
-			}
-			nodo = nodo.getSiguienteNodo();
-		}
-		return null;
-	}
-
 	/**
 	 * Cambia el valor de un nodo dada su posición en la lista
 	 * 
@@ -208,12 +195,27 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 
 	}
 
-	public void modificarNodo(T nodo, T nuevo) throws Exception {
-		Nodo<T> nodoAntiguo = obtenerNodo(nodo);
-		if(nodoAntiguo == null) {
-			throw new Exception("Nodo no encontrado");
+	public void modificarNodo(T valorAntiguo, T valorNuevo) throws Exception {
+		boolean nuevoEncontrado = false;
+		Nodo<T> nodoAntiguo = nodoPrimero;
+		Nodo<T> nodoAntiguoEncontrado = null;
+
+		while (nodoAntiguo != null) {
+			if (nodoAntiguo.getValorNodo().equals(valorAntiguo)) {
+				nodoAntiguoEncontrado = nodoAntiguo;
+			} else if(nodoAntiguo.getValorNodo().equals(valorNuevo)) {
+				nuevoEncontrado = true;
+				break;
+			}
+			nodoAntiguo = nodoAntiguo.getSiguienteNodo();
 		}
-		nodoAntiguo.setValorNodo(nuevo);
+		
+		if(nodoAntiguoEncontrado == null) {
+			throw new Exception("0");
+		} else if(nuevoEncontrado) {
+			throw new Exception("1");
+		}
+		nodoAntiguoEncontrado.setValorNodo(valorNuevo);
 	}
 
 	/**

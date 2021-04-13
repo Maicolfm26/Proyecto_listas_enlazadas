@@ -37,11 +37,15 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 		listaProcesos.eliminar(proceso);
 	}
 
-	public void editarProceso(Proceso proceso, Proceso procesoActualizado) throws ProcesoNoExisteException {
+	public void editarProceso(Proceso proceso, Proceso procesoActualizado) throws ProcesoNoExisteException, YaExisteProcesoException {
 		try {
 			listaProcesos.modificarNodo(proceso, procesoActualizado);
 		} catch (Exception e) {
-			throw new ProcesoNoExisteException("El proceso no fue encontrado");
+			if(e.getMessage().equals("0")) {
+				throw new ProcesoNoExisteException("El proceso a editar no ha sido encontrado");
+			} else {
+				throw new YaExisteProcesoException("Ya existe un proceso con este ID");
+			}
 		}
 	}
 

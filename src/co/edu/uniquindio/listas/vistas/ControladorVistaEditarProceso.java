@@ -73,11 +73,11 @@ public class ControladorVistaEditarProceso implements Initializable {
 			String nombre = nombreTextField.getText();
 			String id = idTextField.getText();
 			procesoActualizado = new Proceso(id, nombre);
-			okClicked = true;
 			try {
 				singleton.editarProceso(proceso, procesoActualizado);
 				dialogStage.close();
-			} catch (ProcesoNoExisteException e) {
+				okClicked = true;
+			} catch (ProcesoNoExisteException | YaExisteProcesoException e) {
 				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", e.getMessage());
 			}
 		}

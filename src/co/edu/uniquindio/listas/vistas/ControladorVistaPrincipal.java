@@ -3,13 +3,14 @@ package co.edu.uniquindio.listas.vistas;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
+import com.jfoenix.controls.JFXTextField;
 import co.edu.uniquindio.listas.aplicacion.Aplicacion;
 import co.edu.uniquindio.listas.controller.ModelFactoryController;
-import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
 import co.edu.uniquindio.listas.model.Proceso;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +36,9 @@ public class ControladorVistaPrincipal implements Initializable {
 	@FXML
 	private TableColumn<Proceso, String> nombreColumn;
 
+	@FXML
+	private JFXTextField buscarTextField;
+
 	private final ObservableList<Proceso> listadoProcesos = FXCollections.observableArrayList();
 
 	@Override
@@ -42,12 +46,36 @@ public class ControladorVistaPrincipal implements Initializable {
 		singleton = ModelFactoryController.getInstance();
 		idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
 		nombreColumn.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
-	}
-
-	@FXML
-	private void actualizarTabla() {
 		listadoProcesos.addAll(singleton.getListadoProcesos().creadorTablas());
-		tablaProcesos.setItems(listadoProcesos);
+		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
+		FilteredList<Proceso> filteredData = new FilteredList<>(listadoProcesos, p -> true);
+
+		// 2. Set the filter Predicate whenever the filter changes.
+		buscarTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredData.setPredicate(proc -> {
+				// If filter text is empty, display all persons.
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+
+				// Compare first name and last name of every person with filter text.
+				String lowerCaseFilter = newValue.toLowerCase();
+
+				if (proc.getId().toLowerCase().contains(lowerCaseFilter)) {
+					return true; // Filter matches first name.
+				}
+				return false; // Does not match.
+			});
+		});
+
+		// 3. Wrap the FilteredList in a SortedList.
+		SortedList<Proceso> sortedData = new SortedList<>(filteredData);
+
+		// 4. Bind the SortedList comparator to the TableView comparator.
+		sortedData.comparatorProperty().bind(tablaProcesos.comparatorProperty());
+
+		// 5. Add sorted (and filtered) data to the table.
+		tablaProcesos.setItems(sortedData);
 	}
 
 	@FXML
@@ -56,7 +84,8 @@ public class ControladorVistaPrincipal implements Initializable {
 		if (ruta != "") {
 			try {
 				singleton.cargarContenedor(ruta);
-				actualizarTabla();
+				listadoProcesos.clear();
+				listadoProcesos.addAll(singleton.getListadoProcesos().creadorTablas());
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", "Error al cargar el archivo");
 			}
@@ -68,7 +97,6 @@ public class ControladorVistaPrincipal implements Initializable {
 		singleton = singleton.nuevoContenedor();
 		listadoProcesos.clear();
 		tablaProcesos.getItems().clear();
-		actualizarTabla();
 	}
 
 	@FXML
@@ -101,7 +129,8 @@ public class ControladorVistaPrincipal implements Initializable {
 			miControlador.setEscenario(dialogStage);
 			dialogStage.showAndWait();
 			if (miControlador.isOkClicked()) {
-				tablaProcesos.getItems().add(miControlador.getProceso());
+				listadoProcesos.add(miControlador.getProceso());
+
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -129,7 +158,7 @@ public class ControladorVistaPrincipal implements Initializable {
 				miControlador.actualizarCampos();
 				dialogStage.showAndWait();
 				if (miControlador.isOkClicked()) {
-					tablaProcesos.getItems().set(posicion, miControlador.getProcesoActualizado());
+					listadoProcesos.set(posicion, miControlador.getProcesoActualizado());
 				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
@@ -147,17 +176,12 @@ public class ControladorVistaPrincipal implements Initializable {
 				int seleccion = tablaProcesos.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
 					Proceso proceso = tablaProcesos.getSelectionModel().getSelectedItem();
-					tablaProcesos.getItems().remove(seleccion);
+					listadoProcesos.remove(seleccion);
 					singleton.eliminarProceso(proceso);
 				}
 			}
 		} else {
 			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun proceso");
 		}
-	}
-
-	@FXML
-	private void editarProceso() {
-
 	}
 }

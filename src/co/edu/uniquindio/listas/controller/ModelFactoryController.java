@@ -54,7 +54,7 @@ public class ModelFactoryController {
 		contenedor.eliminarProceso(proceso);
 	}
 
-	public void editarProceso(Proceso proceso, Proceso procesoActualizado) throws ProcesoNoExisteException {
+	public void editarProceso(Proceso proceso, Proceso procesoActualizado) throws ProcesoNoExisteException, YaExisteProcesoException {
 		contenedor.editarProceso(proceso, procesoActualizado);
 	}
 	

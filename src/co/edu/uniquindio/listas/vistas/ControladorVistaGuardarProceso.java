@@ -56,6 +56,7 @@ public class ControladorVistaGuardarProceso implements Initializable {
 				okClicked = true;
 				dialogStage.close();
 			} catch (YaExisteProcesoException e) {
+				okClicked = false;
 				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", e.getMessage());
 			}
 		}
