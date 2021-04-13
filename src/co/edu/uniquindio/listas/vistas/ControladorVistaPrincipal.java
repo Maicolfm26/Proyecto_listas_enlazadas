@@ -3,6 +3,10 @@ package co.edu.uniquindio.listas.vistas;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
+import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXTextField;
 import co.edu.uniquindio.listas.aplicacion.Aplicacion;
 import co.edu.uniquindio.listas.controller.ModelFactoryController;
@@ -12,6 +16,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -19,14 +24,24 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ControladorVistaPrincipal implements Initializable {
 
 	ModelFactoryController singleton;
+	@FXML
+	private StackPane rootPane;
+	
+	@FXML
+    private BorderPane rootBorderPane;
+
 	@FXML
 	private TableView<Proceso> tablaProcesos;
 
@@ -87,7 +102,7 @@ public class ControladorVistaPrincipal implements Initializable {
 				listadoProcesos.clear();
 				listadoProcesos.addAll(singleton.getListadoProcesos().creadorTablas());
 			} catch (IOException e) {
-				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", "Error al cargar el archivo");
+				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al cargar el archivo");
 			}
 		}
 	}
@@ -106,7 +121,7 @@ public class ControladorVistaPrincipal implements Initializable {
 			try {
 				singleton.guardarContenedor(ruta);
 			} catch (IOException e) {
-				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", "Error al guardar el archivo");
+				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al guardar el archivo");
 			}
 		}
 
@@ -117,7 +132,7 @@ public class ControladorVistaPrincipal implements Initializable {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Aplicacion.class.getResource("../vistas/guardarProcesoVista.fxml"));
-			AnchorPane vistaRegistro = (AnchorPane) loader.load();
+			StackPane vistaRegistro = (StackPane) loader.load();
 			Scene scene = new Scene(vistaRegistro);
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Crear proceso");
@@ -130,7 +145,7 @@ public class ControladorVistaPrincipal implements Initializable {
 			dialogStage.showAndWait();
 			if (miControlador.isOkClicked()) {
 				listadoProcesos.add(miControlador.getProceso());
-
+				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Agregado correctamente");
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -144,7 +159,7 @@ public class ControladorVistaPrincipal implements Initializable {
 			try {
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(Aplicacion.class.getResource("../vistas/editarProcesoVista.fxml"));
-				AnchorPane vistaRegistro = (AnchorPane) loader.load();
+				StackPane vistaRegistro = (StackPane) loader.load();
 				Scene scene = new Scene(vistaRegistro);
 				Stage dialogStage = new Stage();
 				dialogStage.setTitle("Editar cuestionario");
@@ -159,29 +174,31 @@ public class ControladorVistaPrincipal implements Initializable {
 				dialogStage.showAndWait();
 				if (miControlador.isOkClicked()) {
 					listadoProcesos.set(posicion, miControlador.getProcesoActualizado());
+					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Proceso actualizado");
 				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
 		} else {
-			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun proceso");
+			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
 		}
 	}
 
 	@FXML
 	private void eliminarProceso() {
 		if (tablaProcesos.getSelectionModel().getSelectedIndex() >= 0) {
-			if (Aplicacion.mostrarMensajeRespuesta(AlertType.WARNING, "Eliminar proceso",
+			if (Aplicacion.mostrarMensajeRespuesta(rootPane, rootBorderPane,
 					"Estas seguro que deseas eliminar el proceso")) {
 				int seleccion = tablaProcesos.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
 					Proceso proceso = tablaProcesos.getSelectionModel().getSelectedItem();
 					listadoProcesos.remove(seleccion);
 					singleton.eliminarProceso(proceso);
+					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Proceso eliminado");
 				}
 			}
 		} else {
-			Aplicacion.mostrarMensaje("", AlertType.WARNING, "Error", "", "No se ha seleccionado ningun proceso");
+			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
 		}
 	}
 }

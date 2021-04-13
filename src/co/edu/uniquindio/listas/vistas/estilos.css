@@ -1,5 +1,7 @@
 .button-red {
     -fx-background-color: #dd2a2a;
+    -fx-text-fill: white;
+    -fx-font-size: 15.0 pt;
 }
 
 .button-red:hover {
@@ -8,6 +10,8 @@
 
 .button-black {
     -fx-background-color: #393e46;
+    -fx-text-fill: white;
+    -fx-font-size: 15.0 pt;
 }
 
 .button-black:hover {

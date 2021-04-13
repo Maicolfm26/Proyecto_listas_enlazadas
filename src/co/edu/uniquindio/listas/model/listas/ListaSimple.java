@@ -205,7 +205,6 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 				nodoAntiguoEncontrado = nodoAntiguo;
 			} else if(nodoAntiguo.getValorNodo().equals(valorNuevo)) {
 				nuevoEncontrado = true;
-				break;
 			}
 			nodoAntiguo = nodoAntiguo.getSiguienteNodo();
 		}

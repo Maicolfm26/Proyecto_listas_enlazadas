@@ -12,6 +12,8 @@ import co.edu.uniquindio.listas.model.Proceso;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class ControladorVistaGuardarProceso implements Initializable {
@@ -24,6 +26,10 @@ public class ControladorVistaGuardarProceso implements Initializable {
 	private Stage dialogStage;
 	private boolean okClicked;
 	private Proceso proceso;
+	@FXML
+	private StackPane rootPane;
+    @FXML
+    private AnchorPane rootAnchorPane;
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -33,6 +39,10 @@ public class ControladorVistaGuardarProceso implements Initializable {
 	public void setEscenario(Stage dialogStage) {
 		this.dialogStage = dialogStage;
 
+	}
+
+	public void setRootPane(StackPane rootPane) {
+		this.rootPane = rootPane;
 	}
 
 	public boolean isOkClicked() {
@@ -46,7 +56,7 @@ public class ControladorVistaGuardarProceso implements Initializable {
 	@FXML
 	private void agregarProceso() {
 		if (idTextField.getText().isEmpty() || nombreTextField.getText().isEmpty()) {
-			Aplicacion.mostrarMensaje("", AlertType.ERROR, "Error", "", "Debe llenar todos los campos");
+			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Debe llenar todos los campos");
 		} else {
 			String id = idTextField.getText();
 			String nombre = nombreTextField.getText();
@@ -57,7 +67,7 @@ public class ControladorVistaGuardarProceso implements Initializable {
 				dialogStage.close();
 			} catch (YaExisteProcesoException e) {
 				okClicked = false;
-				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", e.getMessage());
+				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
 			}
 		}
 	}

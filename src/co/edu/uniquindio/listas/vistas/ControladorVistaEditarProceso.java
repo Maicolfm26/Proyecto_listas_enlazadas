@@ -12,30 +12,37 @@ import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import co.edu.uniquindio.listas.model.Proceso;
 
 public class ControladorVistaEditarProceso implements Initializable {
-	
+
 	private ModelFactoryController singleton;
 	private Stage dialogStage;
 	private boolean okClicked = false;
 	private Proceso proceso;
 	private Proceso procesoActualizado;
 	@FXML
+	private StackPane rootPane;
+	@FXML
+    private AnchorPane rootAnchorPane;
+
+	@FXML
 	private JFXTextField idTextField;
 	@FXML
 	private JFXTextField nombreTextField;
-	
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		singleton = ModelFactoryController.getInstance();
 	}
-	
+
 	public void setEscenario(Stage dialogStage) {
 		this.dialogStage = dialogStage;
 	}
-	
+
 	public Proceso getProceso() {
 		return proceso;
 	}
@@ -47,6 +54,10 @@ public class ControladorVistaEditarProceso implements Initializable {
 	public Proceso getProcesoActualizado() {
 		return procesoActualizado;
 	}
+	
+	public void setRootPane(StackPane rootPane) {
+		this.rootPane = rootPane;
+	}
 
 	@FXML
 	private void cancelarPulsado() {
@@ -55,21 +66,22 @@ public class ControladorVistaEditarProceso implements Initializable {
 		proceso = null;
 		procesoActualizado = null;
 	}
-	
+
 	public boolean isOkClicked() {
 		return okClicked;
 	}
-	
+
 	public void actualizarCampos() {
 		nombreTextField.setText(proceso.getNombre());
 		idTextField.setText(proceso.getId());
 	}
-	
+
 	@FXML
 	private void editarProceso() {
-		if(nombreTextField.getText().isEmpty() || idTextField.getText().isEmpty()) {
-			Aplicacion.mostrarMensaje("",AlertType.ERROR , "ERROR", "", "Se deben llenar todos los campos");
-		}else {
+		if (nombreTextField.getText().isEmpty() || idTextField.getText().isEmpty()) {
+			dialogStage.show();
+			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Se deben llenar todos los campos");
+		} else {
 			String nombre = nombreTextField.getText();
 			String id = idTextField.getText();
 			procesoActualizado = new Proceso(id, nombre);
@@ -78,7 +90,7 @@ public class ControladorVistaEditarProceso implements Initializable {
 				dialogStage.close();
 				okClicked = true;
 			} catch (ProcesoNoExisteException | YaExisteProcesoException e) {
-				Aplicacion.mostrarMensaje("", AlertType.ERROR, "ERROR", "", e.getMessage());
+				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
 			}
 		}
 	}
