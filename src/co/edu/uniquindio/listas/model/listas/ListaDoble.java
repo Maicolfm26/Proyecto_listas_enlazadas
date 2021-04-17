@@ -1,85 +1,76 @@
 package co.edu.uniquindio.listas.model.listas;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-
 
 /**
  * 
  * Definición de la clase lista Simple de tipo Generics
+ * 
  * @param <T>
  * 
- * **/
+ **/
 
 public class ListaDoble<T> implements Iterable<T>, Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private NodoDoble<T> nodoPrimero;
 	private NodoDoble<T> nodoUltimo;
 	private int tamanio;
-	
 
 	public ListaDoble() {
 		nodoPrimero = null;
-		nodoPrimero = null;
+		nodoUltimo = null;
 		tamanio = 0;
 	}
-	
-	
-	//Metodos basicos
-	
-	
-	//Agregar al inicio de la lista
+
+	// Metodos basicos
+
+	// Agregar al inicio de la lista
 	public void agregarInicio(T valorNodo) {
-		
+
 		NodoDoble<T> nuevoNodo = new NodoDoble<>(valorNodo);
-		
-		if(estaVacia())
-		{
+
+		if (estaVacia()) {
 			nodoPrimero = nodoUltimo = nuevoNodo;
-		}
-		else
-		{
+		} else {
 			nuevoNodo.setSiguienteNodo(nodoPrimero);
 			nodoPrimero = nuevoNodo;
 		}
 		tamanio++;
 	}
-	
-	
-	//Agregar al final de la lista
+
+	// Agregar al final de la lista
 	public void agregarfinal(T valorNodo) {
-		
+
 		NodoDoble<T> nuevoNodo = new NodoDoble<>(valorNodo);
-		
-		if(estaVacia())
-		{
+
+		if (estaVacia()) {
 			nodoPrimero = nodoUltimo = nuevoNodo;
-		}
-		else
-		{
+		} else {
 			nodoUltimo.setSiguienteNodo(nuevoNodo);
 			nuevoNodo.setAnteriorNodo(nodoUltimo);
 			nodoUltimo = nuevoNodo;
 		}
 		tamanio++;
 	}
-	
-	
+
 	/**
 	 * Agrega un valor en la lista en una posición específica
+	 * 
 	 * @param indice índice donde se va a guardar el dato
-	 * @param nuevo El valor a guardar
+	 * @param nuevo  El valor a guardar
 	 */
 	public void agregar(T dato, int indice) {
 
-		if(indiceValido(indice)) {
+		if (indiceValido(indice)) {
 
-			if(indice==0) {
+			if (indice == 0) {
 				agregarInicio(dato);
-			}
-			else {
-				NodoDoble<T> nuevo = new NodoDoble<>(dato);			
+			} else {
+				NodoDoble<T> nuevo = new NodoDoble<>(dato);
 				NodoDoble<T> actual = obtenerNodo(indice);
 
 				nuevo.setSiguienteNodo(actual);
@@ -92,7 +83,34 @@ public class ListaDoble<T> implements Iterable<T>, Serializable {
 		}
 	}
 
-	
+	public void agregarReferencia(T dato, T referencia) throws Exception {
+
+		if (tamanio == 0) {
+			agregarInicio(dato);
+		} else {
+			NodoDoble<T> aux = nodoPrimero;
+			NodoDoble<T> nuevo = null;
+			
+			while (aux != null) {
+				if (aux.getValorNodo().equals(referencia)) {
+					NodoDoble<T> siguiente = aux.getSiguienteNodo();
+					nuevo = new NodoDoble<>(dato);
+					aux.setSiguienteNodo(nuevo);
+					nuevo.setAnteriorNodo(aux);
+					nuevo.setSiguienteNodo(siguiente);
+					siguiente.setAnteriorNodo(nuevo);
+					break;
+				}
+				aux = aux.getSiguienteNodo();
+			}
+			
+			if(nuevo == null) {
+				throw new Exception("No existe la referencia");
+
+			}
+		}
+	}
+
 	/**
 	 * Borra completamente la Lista
 	 */
@@ -100,278 +118,300 @@ public class ListaDoble<T> implements Iterable<T>, Serializable {
 		nodoPrimero = nodoUltimo = null;
 		tamanio = 0;
 	}
-	
-	
-	//Obtener Nodo el valor de un Nodo
+
+	// Obtener Nodo el valor de un Nodo
 	public T obtenerValorNodo(int indice) {
-		
+
 		NodoDoble<T> nodoTemporal = null;
 		int contador = 0;
-		
-		if(indiceValido(indice))
-		{
+
+		if (indiceValido(indice)) {
 			nodoTemporal = nodoPrimero;
-			
+
 			while (contador < indice) {
-				
+
 				nodoTemporal = nodoTemporal.getSiguienteNodo();
 				contador++;
 			}
 		}
-		
-		if(nodoTemporal != null)
+
+		if (nodoTemporal != null)
 			return nodoTemporal.getValorNodo();
 		else
 			return null;
 	}
-	
-	
-	//Verificar si indice es valido
-	private boolean indiceValido(int indice) {		
-		if( indice>=0 && indice<tamanio ) {
+
+	// Verificar si indice es valido
+	private boolean indiceValido(int indice) {
+		if (indice >= 0 && indice < tamanio) {
 			return true;
-		}			
+		}
 		throw new RuntimeException("Índice no válido");
 	}
-	
-	
-	//Verificar si la lista esta vacia
+
+	// Verificar si la lista esta vacia
 	public boolean estaVacia() {
 //		return(nodoPrimero == null)?true:false;
 		return nodoPrimero == null && nodoUltimo == null;
 	}
 
-	
 	/**
 	 * Imprime en consola la lista enlazada
 	 */
 	public void imprimirLista() {
-		
+
 		NodoDoble<T> aux = nodoPrimero;
-		
-		while(aux!=null) {
-			System.out.print( aux.getValorNodo()+"\t" );
-			aux = aux.getSiguienteNodo();			
+
+		while (aux != null) {
+			System.out.print(aux.getValorNodo() + "\t");
+			aux = aux.getSiguienteNodo();
 		}
-		
+
 		System.out.println();
 	}
-	
+
 	public void imprimirHaciaAtras() {
-		
-		for(NodoDoble<T> aux = nodoUltimo; aux!=null; aux = aux.getAnteriorNodo()) {
-			System.out.print( aux.getValorNodo()+"\t" );
+
+		for (NodoDoble<T> aux = nodoUltimo; aux != null; aux = aux.getAnteriorNodo()) {
+			System.out.print(aux.getValorNodo() + "\t");
 		}
 		System.out.println();
-		
+
 	}
-	
-	
-	//Eliminar dado el valor de un nodo
+
+	// Eliminar dado el valor de un nodo
 	/**
 	 * Elimina un elemento de la lista
+	 * 
 	 * @param dato dato a eliminar
 	 * @return El dato que se elimina
+	 * @throws Exception
 	 */
-	public T eliminar(T dato) {
-		
+	public T eliminar(T dato) throws Exception {
+
 		NodoDoble<T> nodo = buscarNodo(dato);
-		
-		if(nodo!=null) {
+
+		if (nodo != null) {
 
 			NodoDoble<T> previo = nodo.getAnteriorNodo();
 			NodoDoble<T> siguiente = nodo.getSiguienteNodo();
-			
-			if(previo==null) {
+
+			if (previo == null) {
 				nodoPrimero = siguiente;
-			}else {
+			} else {
 				previo.setSiguienteNodo(siguiente);
 			}
-			
-			if(siguiente==null) {
+
+			if (siguiente == null) {
 				nodoUltimo = previo;
-			}else {
+			} else {
 				siguiente.setAnteriorNodo(previo);
 			}
-			
-			nodo=null;
+
+			nodo = null;
 			tamanio--;
-			
+
 			return dato;
 		}
-		
-		throw new RuntimeException("El valor no existe");		
+
+		throw new Exception("El valor no existe");
 	}
-	
-	
-	//Elimina el primer nodo de la lista
+
+	// Elimina el primer nodo de la lista
 	public T eliminarPrimero() {
-		
-		if( !estaVacia() ) {
+
+		if (!estaVacia()) {
 			NodoDoble<T> nodoAux = nodoPrimero;
-		    T valor = nodoAux.getValorNodo();
+			T valor = nodoAux.getValorNodo();
 			nodoPrimero = nodoAux.getSiguienteNodo();
-			
-			if(nodoPrimero==null) {
+
+			if (nodoPrimero == null) {
 				nodoUltimo = null;
-			}
-			else
-			{
+			} else {
 				nodoPrimero.setAnteriorNodo(null);
 			}
-			
+
 			tamanio--;
 			return valor;
 		}
-		
-		throw new RuntimeException("Lista vacía");		
+
+		throw new RuntimeException("Lista vacía");
 	}
 
-	
 	public T eliminarUltimo() {
-		
-		if( !estaVacia() ) {			
+
+		if (!estaVacia()) {
 			T valor = nodoUltimo.getValorNodo();
-			NodoDoble<T> prev = obtenerNodo(tamanio-2);
+			NodoDoble<T> prev = obtenerNodo(tamanio - 2);
 			nodoUltimo = prev;
-			
-			if(nodoUltimo==null) {
-				nodoPrimero=null;
-			}else {					
+
+			if (nodoUltimo == null) {
+				nodoPrimero = null;
+			} else {
 				prev.setSiguienteNodo(null);
-			}				
-			
+			}
+
 			tamanio--;
 			return valor;
 		}
-		
-		throw new RuntimeException("Lista vacía");
-	}	
 
-	
+		throw new RuntimeException("Lista vacía");
+	}
+
 	/**
 	 * Devuelve el Nodo de una lista dada su posición
+	 * 
 	 * @param indice índice para obtener el Nodo
 	 * @return Nodo objeto
 	 */
 	private NodoDoble<T> obtenerNodo(int indice) {
-		
-		if(indice>=0 && indice<tamanio) {
-		
+
+		if (indice >= 0 && indice < tamanio) {
+
 			NodoDoble<T> nodo = nodoPrimero;
-			
+
 			for (int i = 0; i < indice; i++) {
 				nodo = nodo.getSiguienteNodo();
 			}
-		
-			return nodo;			
+
+			return nodo;
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Devuelve un nodo que contenga un dato específico
+	 * 
 	 * @param dato Dato a buscar
-	 * @return Nodo 
+	 * @return Nodo
 	 */
-	private NodoDoble<T> buscarNodo(T dato){
-		
+	private NodoDoble<T> buscarNodo(T dato) {
+
 		NodoDoble<T> aux = nodoPrimero;
-		
-		while(aux!=null) {
-			if(aux.getValorNodo().equals(dato)) {
+
+		while (aux != null) {
+			if (aux.getValorNodo().equals(dato)) {
 				return aux;
 			}
 			aux = aux.getSiguienteNodo();
 		}
-		
-		return null;		
+
+		return null;
 	}
 
-	
-	
 	/**
 	 * Cambia el valor de un nodo dada su posición en la lista
+	 * 
 	 * @param indice posición donde se va a cambiar el dato
-	 * @param nuevo nuevo valor por el que se actualizará el nodo
+	 * @param nuevo  nuevo valor por el que se actualizará el nodo
 	 */
 	public void modificarNodo(int indice, T nuevo) {
-		
-		if( indiceValido(indice) ) {			
+
+		if (indiceValido(indice)) {
 			NodoDoble<T> nodo = obtenerNodo(indice);
-			nodo.setValorNodo(nuevo);			
+			nodo.setValorNodo(nuevo);
 		}
-		
+
 	}
-	
-	
+
+	public void modificarNodo(T valorAntiguo, T valorNuevo) throws Exception {
+		boolean nuevoEncontrado = false;
+		NodoDoble<T> nodoAntiguo = nodoPrimero;
+		NodoDoble<T> nodoAntiguoEncontrado = null;
+
+		while (nodoAntiguo != null) {
+			if (nodoAntiguo.getValorNodo().equals(valorAntiguo)) {
+				nodoAntiguoEncontrado = nodoAntiguo;
+			} else if (nodoAntiguo.getValorNodo().equals(valorNuevo)) {
+				nuevoEncontrado = true;
+			}
+			nodoAntiguo = nodoAntiguo.getSiguienteNodo();
+		}
+
+		if (nodoAntiguoEncontrado == null) {
+			throw new Exception("0");
+		} else if (nuevoEncontrado) {
+			throw new Exception("1");
+		}
+		nodoAntiguoEncontrado.setValorNodo(valorNuevo);
+	}
+
 	/**
 	 * Retorna la primera posición donde está guardado el dato
+	 * 
 	 * @param dato valor a buscar dentro de la lista
 	 * @return primera posición del dato
 	 */
 	public int obtenerPosicionNodo(T dato) {
 
 		int i = 0;
-		
-		for( NodoDoble<T> aux = nodoPrimero ; aux!=null ; aux = aux.getSiguienteNodo() ) {
-			if( aux.getValorNodo().equals(dato) ) {
+
+		for (NodoDoble<T> aux = nodoPrimero; aux != null; aux = aux.getSiguienteNodo()) {
+			if (aux.getValorNodo().equals(dato)) {
 				return i;
 			}
 			i++;
 		}
-		
+
 		return -1;
 	}
-	
-	
+
 	/**
 	 * Devuelve un elemento de la lista dado su índice
+	 * 
 	 * @param indice índice de la lista
 	 * @return dato guardado en el índice especificado
 	 */
 	public T obtener(int indice) {
-		
-		if( indiceValido(indice) ) {
+
+		if (indiceValido(indice)) {
 			NodoDoble<T> n = obtenerNodo(indice);
-			
-			if(n!=null) {
+
+			if (n != null) {
 				return n.getValorNodo();
 			}
 		}
 
-		return null;		
+		return null;
 	}
 
-	
-	
-	
-	
-	
+	public Collection<T> creadorTablas() {
+		Collection<T> lista = new ArrayList<>();
+
+		NodoDoble<T> aux = nodoPrimero;
+
+		while (aux != null) {
+			lista.add(aux.getValorNodo());
+			aux = aux.getSiguienteNodo();
+		}
+		return lista;
+	}
+
 	@Override
 	public Iterator<T> iterator() {
-		
-		return new IteradorListaDoble (nodoPrimero);
+
+		return new IteradorListaDoble(nodoPrimero);
 	}
-	
-	protected class IteradorListaDoble implements Iterator<T>{
+
+	protected class IteradorListaDoble implements Iterator<T> {
 
 		private NodoDoble<T> nodo;
 		private int posicion;
-		
+
 		/**
 		 * Constructor de la clase Iterador
+		 * 
 		 * @param aux Primer Nodo de la lista
 		 */
 		public IteradorListaDoble(NodoDoble<T> nodo) {
 			this.nodo = nodo;
 			this.posicion = 0;
 		}
-		
+
 		@Override
 		public boolean hasNext() {
-			return nodo!=null;
+			return nodo != null;
 		}
 
 		@Override
@@ -381,63 +421,63 @@ public class ListaDoble<T> implements Iterable<T>, Serializable {
 			posicion++;
 			return valor;
 		}
-		
+
 		public boolean hasPrevious() {
-			return nodo!=null;
+			return nodo != null;
 		}
-		
-		
+
 		public T previous() {
 			T aux = nodo.getValorNodo();
 			nodo = nodo.getAnteriorNodo();
 			posicion--;
 			return aux;
 		}
-		
+
 		public int nextIndex() {
 			return posicion;
 		}
-		
 
 		public int previousIndex() {
-			return posicion-1;
+			return posicion - 1;
 		}
 
 		public void remove() {
-			if(nodo!=null) {
-				eliminar(nodo.getValorNodo());
+			if (nodo != null) {
+				try {
+					eliminar(nodo.getValorNodo());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
-		
+
 		public void set(T e) {
-			if(nodo!=null) {
-				nodo.setValorNodo(e);				
+			if (nodo != null) {
+				nodo.setValorNodo(e);
 			}
 		}
 
 		public void add(T e) {
 			agregarfinal(e);
 		}
-		
-		
+
 		/**
 		 * Posición actual de la lista
+		 * 
 		 * @return posición
 		 */
 		public int getPosicion() {
 			return posicion;
 		}
-		
+
 	}
-	
-	
-	//Metodos get y set de la clase ListaSimple
-	
-	
+
+	// Metodos get y set de la clase ListaSimple
+
 	public NodoDoble<T> getNodoPrimero() {
 		return nodoPrimero;
 	}
-
 
 	public void setNodoPrimero(NodoDoble<T> nodoPrimero) {
 		this.nodoPrimero = nodoPrimero;
@@ -447,24 +487,16 @@ public class ListaDoble<T> implements Iterable<T>, Serializable {
 		return nodoUltimo;
 	}
 
-
 	public void setNodoUltimo(NodoDoble<T> nodoUltimo) {
 		this.nodoUltimo = nodoUltimo;
 	}
-
 
 	public int getTamanio() {
 		return tamanio;
 	}
 
-
 	public void setTamanio(int tamaño) {
 		this.tamanio = tamaño;
 	}
-
-
-
-	
-	
 
 }

@@ -38,11 +38,11 @@ public class Actividad implements Serializable {
 		this.descripcion = descripcion;
 	}
 
-	public Requerida getRequeria() {
+	public Requerida getRequerida() {
 		return requerida;
 	}
 
-	public void setRequeria(Requerida requeria) {
+	public void setRequerida(Requerida requeria) {
 		this.requerida = requeria;
 	}
 
@@ -77,6 +77,11 @@ public class Actividad implements Serializable {
 		} else if (!nombre.equals(other.nombre))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return nombre;
 	}
 	
 }

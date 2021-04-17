@@ -3,10 +3,14 @@ package co.edu.uniquindio.listas.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
+import co.edu.uniquindio.listas.model.Actividad;
 import co.edu.uniquindio.listas.model.Contenedor;
 import co.edu.uniquindio.listas.model.Proceso;
+import co.edu.uniquindio.listas.model.listas.ListaDoble;
 import co.edu.uniquindio.listas.model.listas.ListaSimple;
 import co.edu.uniquindio.listas.persistencia.Persistencia;
 
@@ -58,4 +62,19 @@ public class ModelFactoryController {
 		contenedor.editarProceso(proceso, procesoActualizado);
 	}
 	
+	public ListaDoble<Actividad> getActividadesProceso(Proceso proceso) {
+		return contenedor.getActividadesProceso(proceso);
+	}
+	
+	public void agregarActividad(Proceso proceso, Actividad actividad, Actividad actividadAnterior, int opcion) throws YaExisteActividadException, ActividadNoExisteException {
+		contenedor.agregarActividad(proceso, actividad, actividadAnterior, opcion);
+	}
+	
+	public void eliminarActividad(Proceso proceso, Actividad actividad) throws ActividadNoExisteException {
+		contenedor.eliminarActividad(proceso, actividad);
+	}
+	
+	public void editarActividad(Proceso proceso, Actividad actividad, Actividad actividadActualizada) throws ActividadNoExisteException, YaExisteActividadException {
+		contenedor.editarActividad(proceso, actividad, actividadActualizada);
+	}
 }

@@ -1,16 +1,16 @@
 package co.edu.uniquindio.listas.aplicacion;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-
 import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
 import com.jfoenix.controls.JFXDialog.DialogTransition;
 import com.jfoenix.controls.events.JFXDialogEvent;
-import co.edu.uniquindio.listas.vistas.ControladorVistaPrincipal;
+import co.edu.uniquindio.listas.model.Proceso;
+import co.edu.uniquindio.listas.vistas.procesos.ControladorVistaPrincipalProcesos;
+import co.edu.uniquindio.listas.vistas.actividades.ControladorVistaPrincipalActividades;
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -39,9 +39,7 @@ public class Aplicacion extends Application {
 	public void start(Stage primaryStage) {
 		escenarioPrincipal = primaryStage;
 		escenarioPrincipal.setTitle("Listas enlazadas");
-		escenarioPrincipal.	setResizable(false);
-//		escenarioPrincipal.initStyle(StageStyle.UNDECORATED); 
-		mostrarVistaPrincipal();
+		mostrarVistaPrincipalProcesos();
 	}
 
 	public static void main(String[] args) {
@@ -120,28 +118,31 @@ public class Aplicacion extends Application {
 		rootPane.setEffect(blur);
 	}
 	
-	public static void mostrarVistaPrincipal() {
+	public static void mostrarVistaPrincipalProcesos() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Aplicacion.class.getResource("../vistas/VistaPrincipal.fxml"));
+			loader.setLocation(Aplicacion.class.getResource("../vistas/procesos/VistaPrincipal.fxml"));
 			StackPane vistaIndex = (StackPane) loader.load();
 			Scene scene = new Scene(vistaIndex);
 			escenarioPrincipal.setScene(scene);
 			escenarioPrincipal.show();
-			ControladorVistaPrincipal miControlador = loader.getController();
+			ControladorVistaPrincipalProcesos miControlador = loader.getController();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	public static void mostrarVistaListasEnlazadas() {
+	public static void mostrarVistaPrincipalActividades(Proceso proceso) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Aplicacion.class.getResource("../vistas/ListaEnlazadasVista.fxml"));
-			AnchorPane vistaIndex = (AnchorPane) loader.load();
+			loader.setLocation(Aplicacion.class.getResource("../vistas/actividades/VistaPrincipal.fxml"));
+			StackPane vistaIndex = (StackPane) loader.load();
 			Scene scene = new Scene(vistaIndex);
 			escenarioPrincipal.setScene(scene);
 			escenarioPrincipal.show();
+			ControladorVistaPrincipalActividades miControlador = loader.getController();
+			miControlador.setProceso(proceso);
+			miControlador.inicializarTabla();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
@@ -174,48 +175,4 @@ public class Aplicacion extends Application {
         }
         return ruta;
 }
-
-//	public static void mostrarVistaAdmin() {
-//		try {
-//			FXMLLoader loader = new FXMLLoader();
-//			loader.setLocation(Aplicacion.class.getResource("../view/AdminVistaPrincipal.fxml"));
-//			AnchorPane vistaIndex = (AnchorPane) loader.load();
-//			Scene scene = new Scene(vistaIndex);
-//			escenarioPrincipal.setScene(scene);
-//			escenarioPrincipal.show();
-//			ControladorVistaAdmin miControlador = loader.getController();
-//			miControlador.inicializarTablas();
-//		} catch (IOException e) {
-//			System.out.println(e.getMessage());
-//		}
-//	}
-	
-//	public static void mostrarVistaEmpleado() {
-//		try {
-//			FXMLLoader loader = new FXMLLoader();
-//			loader.setLocation(Aplicacion.class.getResource("../view/EmpleadoVistaPrincipal.fxml"));
-//			AnchorPane vistaIndex = (AnchorPane) loader.load();
-//			Scene scene = new Scene(vistaIndex);
-//			escenarioPrincipal.setScene(scene);
-//			escenarioPrincipal.show();
-//			ControladorVistaEmpleado miControlador = loader.getController();
-//		} catch (IOException e) {
-//			System.out.println(e.getMessage());
-//		}
-//	}
-
-//	public static void mostrarVistaCliente() {
-//		try {
-//			FXMLLoader loader = new FXMLLoader();
-//			loader.setLocation(Aplicacion.class.getResource("../view/ClienteVistaPrincipal.fxml"));
-//			AnchorPane vistaIndex = (AnchorPane) loader.load();
-//			Scene scene = new Scene(vistaIndex);
-//			escenarioPrincipal.setScene(scene);
-//			escenarioPrincipal.show();
-//			ControladorVistaCliente miControlador = loader.getController();
-//			miControlador.inicializarDatos();
-//		} catch (IOException e) {
-//			System.out.println(e.getMessage());
-//		}
-//	}
 }

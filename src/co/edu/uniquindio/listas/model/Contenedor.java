@@ -1,11 +1,15 @@
 package co.edu.uniquindio.listas.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
+import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
+import co.edu.uniquindio.listas.model.listas.ListaDoble;
 import co.edu.uniquindio.listas.model.listas.ListaSimple;
 
 public class Contenedor extends RecursiveTreeObject<Contenedor> implements Serializable {
@@ -48,5 +52,33 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 			}
 		}
 	}
-
+	
+	public Proceso obtenerProceso(Proceso proceso) {
+		Iterator<Proceso> it = listaProcesos.iterator();
+		Proceso proc = null;
+		
+		while(it.hasNext()) {
+			proc = it.next();
+			if(proc.equals(proceso)) {
+				return proc;
+			}
+		}
+		return null;
+	}
+	
+	public ListaDoble<Actividad> getActividadesProceso(Proceso proceso) {
+		return obtenerProceso(proceso).getListaActividades();
+	}
+	
+	public void agregarActividad(Proceso proceso, Actividad actividad, Actividad actividadAnterior, int opcion) throws YaExisteActividadException, ActividadNoExisteException {
+		obtenerProceso(proceso).agregarActividad(actividad, actividadAnterior, opcion);
+	}
+	
+	public void eliminarActividad(Proceso proceso, Actividad actividad) throws ActividadNoExisteException {
+		obtenerProceso(proceso).eliminarActividad(actividad);
+	}
+	
+	public void editarActividad(Proceso proceso, Actividad actividad, Actividad actividadActualizada) throws ActividadNoExisteException, YaExisteActividadException {
+		obtenerProceso(proceso).editarActividad(actividad, actividadActualizada);
+	}
 }

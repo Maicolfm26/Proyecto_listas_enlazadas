@@ -1,4 +1,4 @@
-package co.edu.uniquindio.listas.vistas;
+package co.edu.uniquindio.listas.vistas.procesos;
 
 import java.io.IOException;
 import java.net.URL;
@@ -33,7 +33,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class ControladorVistaPrincipal implements Initializable {
+public class ControladorVistaPrincipalProcesos implements Initializable {
 
 	ModelFactoryController singleton;
 	@FXML
@@ -131,7 +131,7 @@ public class ControladorVistaPrincipal implements Initializable {
 	private void pulsadoNuevo() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Aplicacion.class.getResource("../vistas/guardarProcesoVista.fxml"));
+			loader.setLocation(Aplicacion.class.getResource("../vistas/procesos/guardarProcesoVista.fxml"));
 			StackPane vistaRegistro = (StackPane) loader.load();
 			Scene scene = new Scene(vistaRegistro);
 			Stage dialogStage = new Stage();
@@ -158,7 +158,7 @@ public class ControladorVistaPrincipal implements Initializable {
 		if (posicion >= 0) {
 			try {
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(Aplicacion.class.getResource("../vistas/editarProcesoVista.fxml"));
+				loader.setLocation(Aplicacion.class.getResource("../vistas/procesos/editarProcesoVista.fxml"));
 				StackPane vistaRegistro = (StackPane) loader.load();
 				Scene scene = new Scene(vistaRegistro);
 				Stage dialogStage = new Stage();
@@ -201,4 +201,14 @@ public class ControladorVistaPrincipal implements Initializable {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
 		}
 	}
+	
+	@FXML
+    private void pulsadoVerActividades() {
+		int posicion = tablaProcesos.getSelectionModel().getSelectedIndex();
+		if (posicion >= 0) {
+			Aplicacion.mostrarVistaPrincipalActividades(tablaProcesos.getSelectionModel().getSelectedItem());
+		} else {
+			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
+		}
+    }
 }

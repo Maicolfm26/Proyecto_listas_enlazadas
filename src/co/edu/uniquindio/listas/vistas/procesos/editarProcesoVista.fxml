@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.listas.vistas.ControladorVistaEditarProceso">
+<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="377.0" prefWidth="299.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.listas.vistas.procesos.ControladorVistaEditarProceso">
    <children>
       <AnchorPane fx:id="rootAnchorPane" prefHeight="328.0" prefWidth="299.0">
          <children>
@@ -21,7 +21,7 @@
                <children>
                   <ImageView fitHeight="75.0" fitWidth="104.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/proceso.png" />
+                        <Image url="@../img/proceso.png" />
                      </image>
                      <VBox.margin>
                         <Insets top="20.0" />
@@ -47,7 +47,7 @@
                   </JFXTextField>
                   <HBox alignment="CENTER" prefHeight="55.0" prefWidth="323.0" spacing="30.0">
                      <children>
-                        <JFXButton onMouseClicked="#cancelarPulsado" styleClass="button-black" stylesheets="@estilos.css" text="Cancelar" textFill="WHITE">
+                        <JFXButton onMouseClicked="#cancelarPulsado" styleClass="button-black" stylesheets="@../estilos.css" text="Cancelar" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -55,7 +55,7 @@
                               <FontAwesomeIconView fill="WHITE" glyphName="TIMES" size="15" />
                            </graphic>
                         </JFXButton>
-                        <JFXButton onMouseClicked="#editarProceso" styleClass="button-red" stylesheets="@estilos.css" text="Actualizar" textFill="WHITE">
+                        <JFXButton onMouseClicked="#editarProceso" styleClass="button-red" stylesheets="@../estilos.css" text="Actualizar" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>

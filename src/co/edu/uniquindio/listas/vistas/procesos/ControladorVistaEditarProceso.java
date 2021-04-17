@@ -1,4 +1,4 @@
-package co.edu.uniquindio.listas.vistas;
+package co.edu.uniquindio.listas.vistas.procesos;
 
 import java.net.URL;
 import java.util.ResourceBundle;
