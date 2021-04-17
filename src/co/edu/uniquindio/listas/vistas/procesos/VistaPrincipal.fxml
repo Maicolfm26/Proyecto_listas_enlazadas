@@ -103,8 +103,10 @@
                   </JFXTextField>
                   <TableView fx:id="tablaProcesos" prefHeight="460.0" prefWidth="425.0" stylesheets="@../estilos.css">
                     <columns>
-                      <TableColumn fx:id="idColumn" minWidth="-1.0" prefWidth="188.0" resizable="false" text="Id" />
-                      <TableColumn fx:id="nombreColumn" minWidth="-1.0" prefWidth="196.0" resizable="false" text="Nombre" />
+                      <TableColumn fx:id="idColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="Id" />
+                      <TableColumn fx:id="nombreColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="Nombre" />
+                        <TableColumn fx:id="tiempoMinColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="T-Min" />
+                        <TableColumn fx:id="tiempoMaxColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="T-Max" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />

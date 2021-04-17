@@ -6,10 +6,13 @@ import com.jfoenix.controls.JFXAlert;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
+import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXDialog.DialogTransition;
 import com.jfoenix.controls.events.JFXDialogEvent;
+import co.edu.uniquindio.listas.model.Actividad;
 import co.edu.uniquindio.listas.model.Proceso;
 import co.edu.uniquindio.listas.vistas.procesos.ControladorVistaPrincipalProcesos;
+import co.edu.uniquindio.listas.vistas.tareas.ControladorVistaPrincipalTareas;
 import co.edu.uniquindio.listas.vistas.actividades.ControladorVistaPrincipalActividades;
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -23,8 +26,10 @@ import javafx.scene.effect.BoxBlur;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -98,6 +103,70 @@ public class Aplicacion extends Application {
 		return bandera;
 	}
 	
+	public static int mostrarMensajeCampo(StackPane root, Pane rootPane, String mensaje) {
+		// Muestra el dialogo
+		// Ensure that the user can't close the alert.
+		BoxBlur blur = new BoxBlur(3, 3, 3);
+		boolean bandera = false;
+		JFXAlert<String> alert = new JFXAlert<>(escenarioPrincipal);
+		alert.initModality(Modality.APPLICATION_MODAL);
+		alert.setOverlayClose(false);
+		
+		// Create the content of the JFXAlert with JFXDialogLayout
+		JFXDialogLayout layout = new JFXDialogLayout();
+		HBox contenedor = new HBox();
+		Text texto = new Text(mensaje);
+		JFXTextField campo = new JFXTextField();
+		campo.setPromptText("Ingrese la posicion");
+		campo.setFocusColor(Paint.valueOf("#ea5959"));
+		campo.setUnFocusColor(Paint.valueOf("#dd2a2a"));
+		campo.setLabelFloat(true);
+		contenedor.getChildren().addAll(texto, campo);
+		contenedor.setSpacing(50);
+		layout.setBody(contenedor);
+		
+		// Buttons get added into the actions section of the layout.
+		JFXButton button1=new JFXButton("Guardar");
+		button1.getStylesheets().add("/co/edu/uniquindio/listas/vistas/estilos.css");
+		button1.getStyleClass().add("button-red");
+		button1.setDefaultButton(true);
+		button1.setOnAction(addEvent -> {
+			// When the button is clicked, we set the result accordingly
+			int numero = -1;
+			try {
+				numero = Integer.parseInt(campo.getText());
+			} catch(NumberFormatException e) {
+				
+			}
+			alert.setResult(numero+"");
+			alert.hideWithAnimation();
+			rootPane.setEffect(null);
+		});
+		
+		JFXButton button2 = new JFXButton("Cancelar");
+		button2.getStylesheets().add("/co/edu/uniquindio/listas/vistas/estilos.css");
+		button2.getStyleClass().add("button-black");
+		button2.setCancelButton(true);
+		button2.setOnAction(closeEvent -> {
+			// When the button is clicked, we set the result accordingly
+			alert.setResult("-1");
+			alert.hideWithAnimation();
+			rootPane.setEffect(null);
+		});
+		
+		layout.setActions(button1, button2);
+		alert.setContent(layout);
+
+		rootPane.setEffect(blur);
+		
+		Optional<String> result = alert.showAndWait();
+		if (result.isPresent()){
+			return Integer.parseInt(result.get());
+		}
+		
+		return 0;
+	}
+	
 	public static void mostrarMensaje(StackPane root, Pane rootPane, String mensaje) {
 		BoxBlur blur = new BoxBlur(3, 3, 3);
 		JFXDialogLayout content= new JFXDialogLayout();
@@ -142,6 +211,23 @@ public class Aplicacion extends Application {
 			escenarioPrincipal.show();
 			ControladorVistaPrincipalActividades miControlador = loader.getController();
 			miControlador.setProceso(proceso);
+			miControlador.inicializarTabla();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public static void mostrarVistaPrincipalTareas(Proceso proceso, Actividad actividad) {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Aplicacion.class.getResource("../vistas/tareas/VistaPrincipal.fxml"));
+			StackPane vistaIndex = (StackPane) loader.load();
+			Scene scene = new Scene(vistaIndex);
+			escenarioPrincipal.setScene(scene);
+			escenarioPrincipal.show();
+			ControladorVistaPrincipalTareas miControlador = loader.getController();
+			miControlador.setProceso(proceso);
+			miControlador.setActividad(actividad);
 			miControlador.inicializarTabla();
 		} catch (IOException e) {
 			System.out.println(e.getMessage());

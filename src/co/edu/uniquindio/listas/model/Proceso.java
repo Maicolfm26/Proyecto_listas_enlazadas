@@ -1,25 +1,29 @@
 package co.edu.uniquindio.listas.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
+import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
+import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
 import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
+import co.edu.uniquindio.listas.model.listas.Cola;
 import co.edu.uniquindio.listas.model.listas.ListaDoble;
 
 public class Proceso implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private String nombre;
 	private Actividad ultimaCreada;
 	private ListaDoble<Actividad> listaActividades;
-	
+
 	public Proceso() {
-		
+
 	}
-	
+
 	public Proceso(String id, String nombre) {
 		this.id = id;
 		this.nombre = nombre;
@@ -75,9 +79,10 @@ public class Proceso implements Serializable {
 			return false;
 		return true;
 	}
-	
-	public void agregarActividad(Actividad actividad, Actividad actividaAnterior, int opcion) throws YaExisteActividadException, ActividadNoExisteException {
-		if(listaActividades.obtenerPosicionNodo(actividad) == -1) {
+
+	public void agregarActividad(Actividad actividad, Actividad actividaAnterior, int opcion)
+			throws YaExisteActividadException, ActividadNoExisteException {
+		if (listaActividades.obtenerPosicionNodo(actividad) == -1) {
 			switch (opcion) {
 			case 0:
 				listaActividades.agregarfinal(actividad);
@@ -104,7 +109,7 @@ public class Proceso implements Serializable {
 			throw new YaExisteActividadException("Ya hay una actividad con este nombre");
 		}
 	}
-	
+
 	public void eliminarActividad(Actividad actividad) throws ActividadNoExisteException {
 		try {
 			listaActividades.eliminar(actividad);
@@ -112,16 +117,59 @@ public class Proceso implements Serializable {
 			throw new ActividadNoExisteException("La actividad no existe");
 		}
 	}
-	
-	public void editarActividad(Actividad actividad, Actividad actividadActualizada) throws ActividadNoExisteException, YaExisteActividadException {
+
+	public void editarActividad(Actividad actividad, Actividad actividadActualizada)
+			throws ActividadNoExisteException, YaExisteActividadException {
 		try {
 			listaActividades.modificarNodo(actividad, actividadActualizada);
 		} catch (Exception e) {
-			if(e.getMessage().equals("0")) {
+			if (e.getMessage().equals("0")) {
 				throw new ActividadNoExisteException("La actividad a editar no ha sido encontrada");
 			} else {
 				throw new YaExisteActividadException("Ya existe una actividad con este nombre");
 			}
 		}
+	}
+
+	public Actividad obtenerActividad(Actividad actividad) {
+		Iterator<Actividad> it = listaActividades.iterator();
+		Actividad actividad2 = null;
+
+		while (it.hasNext()) {
+			actividad2 = it.next();
+			if (actividad2.equals(actividad)) {
+				return actividad2;
+			}
+		}
+		return null;
+	}
+
+	public Cola<Tarea> getTareas(Actividad actividad) {
+		return obtenerActividad(actividad).getListaTareas();
+	}
+
+	public void agregarTarea(Actividad actividad, Tarea tarea, int posicion, int opcion)
+			throws DosTareasOpcionalesException, PosicionInvalidaTareaException {
+		obtenerActividad(actividad).agregarTarea(tarea, posicion, opcion);
+	}
+
+	public int getTiempoMin() {
+		int acomulador = 0;
+		Iterator<Actividad> it = listaActividades.iterator();
+		while (it.hasNext()) {
+			Actividad actividad = it.next();
+			acomulador += actividad.getTiempoMin();
+		}
+		return acomulador;
+	}
+
+	public int getTiempoMax() {
+		int acomulador = 0;
+		Iterator<Actividad> it = listaActividades.iterator();
+		while (it.hasNext()) {
+			Actividad actividad = it.next();
+			acomulador += actividad.getTiempoMax();
+		}
+		return acomulador;
 	}
 }

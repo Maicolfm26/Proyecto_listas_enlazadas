@@ -3,7 +3,6 @@ package co.edu.uniquindio.listas.vistas.procesos;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -38,9 +37,9 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 	ModelFactoryController singleton;
 	@FXML
 	private StackPane rootPane;
-	
+
 	@FXML
-    private BorderPane rootBorderPane;
+	private BorderPane rootBorderPane;
 
 	@FXML
 	private TableView<Proceso> tablaProcesos;
@@ -52,6 +51,12 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 	private TableColumn<Proceso, String> nombreColumn;
 
 	@FXML
+	private TableColumn<Proceso, Integer> tiempoMinColumn;
+
+	@FXML
+	private TableColumn<Proceso, Integer> tiempoMaxColumn;
+
+	@FXML
 	private JFXTextField buscarTextField;
 
 	private final ObservableList<Proceso> listadoProcesos = FXCollections.observableArrayList();
@@ -61,6 +66,8 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 		singleton = ModelFactoryController.getInstance();
 		idColumn.setCellValueFactory(new PropertyValueFactory<>("Id"));
 		nombreColumn.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
+		tiempoMinColumn.setCellValueFactory(new PropertyValueFactory<>("TiempoMin"));
+		tiempoMaxColumn.setCellValueFactory(new PropertyValueFactory<>("TiempoMax"));
 		listadoProcesos.addAll(singleton.getListadoProcesos().creadorTablas());
 		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
 		FilteredList<Proceso> filteredData = new FilteredList<>(listadoProcesos, p -> true);
@@ -201,14 +208,14 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
 		}
 	}
-	
+
 	@FXML
-    private void pulsadoVerActividades() {
+	private void pulsadoVerActividades() {
 		int posicion = tablaProcesos.getSelectionModel().getSelectedIndex();
 		if (posicion >= 0) {
 			Aplicacion.mostrarVistaPrincipalActividades(tablaProcesos.getSelectionModel().getSelectedItem());
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
 		}
-    }
+	}
 }

@@ -1,11 +1,9 @@
-package co.edu.uniquindio.listas.vistas.actividades;
+package co.edu.uniquindio.listas.vistas.tareas;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javax.swing.text.TabableView;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -16,6 +14,7 @@ import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.model.Actividad;
 import co.edu.uniquindio.listas.model.Proceso;
 import co.edu.uniquindio.listas.model.Requerida;
+import co.edu.uniquindio.listas.model.Tarea;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -38,10 +37,11 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class ControladorVistaPrincipalActividades implements Initializable {
+public class ControladorVistaPrincipalTareas implements Initializable {
 
 	private ModelFactoryController singleton;
 	private Proceso proceso;
+	private Actividad actividad;
 
 	@FXML
 	private StackPane rootPane;
@@ -50,21 +50,21 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 	private BorderPane rootBorderPane;
 
 	@FXML
-	private TableView<Actividad> tablaActividades;
+	private TableView<Tarea> tablaTareas;
 
 	@FXML
-	private TableColumn<Actividad, String> nombreColumn;
-
+	private TableColumn<Tarea, String> descripcionColumn;
+	
 	@FXML
-	private TableColumn<Actividad, String> descripcionColumn;
-
+	private TableColumn<Tarea, Requerida> requeridaColumn;
+	
 	@FXML
-	private TableColumn<Actividad, Requerida> requeridaColumn;
+	private TableColumn<Tarea, Integer> duracionColumn;
 
 	@FXML
 	private JFXTextField buscarTextField;
 
-	private final ObservableList<Actividad> listadoActividades = FXCollections.observableArrayList();
+	private final ObservableList<Tarea> listadoTareas = FXCollections.observableArrayList();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -79,13 +79,21 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 		this.proceso = proceso;
 	}
 
+	public Actividad getActividad() {
+		return actividad;
+	}
+
+	public void setActividad(Actividad actividad) {
+		this.actividad = actividad;
+	}
+
 	public void inicializarTabla() {
-		nombreColumn.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
 		descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("Descripcion"));
 		requeridaColumn.setCellValueFactory(new PropertyValueFactory<>("Requerida"));
-		listadoActividades.addAll(singleton.getActividadesProceso(proceso).creadorTablas());
+		duracionColumn.setCellValueFactory(new PropertyValueFactory<>("Duracion"));
+		listadoTareas.addAll(singleton.getTarea(proceso, actividad).creadorTablas());
 		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
-		FilteredList<Actividad> filteredData = new FilteredList<>(listadoActividades, p -> true);
+		FilteredList<Tarea> filteredData = new FilteredList<>(listadoTareas, p -> true);
 
 		// 2. Set the filter Predicate whenever the filter changes.
 		buscarTextField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -98,7 +106,7 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 				// Compare first name and last name of every person with filter text.
 				String lowerCaseFilter = newValue.toLowerCase();
 
-				if (proc.getNombre().toLowerCase().contains(lowerCaseFilter)) {
+				if (proc.getDescripcion().toLowerCase().contains(lowerCaseFilter)) {
 					return true; // Filter matches first name.
 				}
 				return false; // Does not match.
@@ -106,13 +114,13 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 		});
 
 		// 3. Wrap the FilteredList in a SortedList.
-		SortedList<Actividad> sortedData = new SortedList<>(filteredData);
+		SortedList<Tarea> sortedData = new SortedList<>(filteredData);
 
 		// 4. Bind the SortedList comparator to the TableView comparator.
-		sortedData.comparatorProperty().bind(tablaActividades.comparatorProperty());
+		sortedData.comparatorProperty().bind(tablaTareas.comparatorProperty());
 
 		// 5. Add sorted (and filtered) data to the table.
-		tablaActividades.setItems(sortedData);
+		tablaTareas.setItems(sortedData);
 	}
 
 	@FXML
@@ -149,14 +157,14 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 	
 	@FXML
     private void pulsadoVolver() {
-		Aplicacion.mostrarVistaPrincipalProcesos();
+		Aplicacion.mostrarVistaPrincipalActividades(proceso);
     }
 
 	@FXML
 	private void pulsadoNuevo() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Aplicacion.class.getResource("../vistas/actividades/guardarActvidadVista.fxml"));
+			loader.setLocation(Aplicacion.class.getResource("../vistas/tareas/guardarTareaVista.fxml"));
 			StackPane vistaRegistro = (StackPane) loader.load();
 			Scene scene = new Scene(vistaRegistro);
 			Stage dialogStage = new Stage();
@@ -165,19 +173,19 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 			dialogStage.initOwner(Aplicacion.escenarioPrincipal);
 			dialogStage.setScene(scene);
 			// Acceso al controlador.
-			ControladorVistaGuardarActividad miControlador = loader.getController();
+			ControladorVistaGuardarTareas miControlador = loader.getController();
 			miControlador.setEscenario(dialogStage);
 			miControlador.setProceso(proceso);
-			if(listadoActividades.size() == 0) {
+			miControlador.setActividad(actividad);
+			if(listadoTareas.size() == 0) {
 				miControlador.desactivarItems();
 			}
 			dialogStage.showAndWait();
 			if (miControlador.isOkClicked()) {
-				if(miControlador.getTipo() == 1 || miControlador.getTipo() == 2) {
-					listadoActividades.clear();
-					listadoActividades.addAll(singleton.getActividadesProceso(proceso).creadorTablas());
+				if(miControlador.getOpcion() == 1) {
+					listadoTareas.add(miControlador.getPosicion() - 1, miControlador.getTarea());
 				} else {
-					listadoActividades.add(miControlador.getActividad());
+					listadoTareas.add(miControlador.getTarea());
 				}
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Agregado correctamente");
 			}
@@ -187,50 +195,50 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 	}
 
 	@FXML
-	private void pulsadoEditarActividad() {
-		int posicion = tablaActividades.getSelectionModel().getSelectedIndex();
-		if (posicion >= 0) {
-			try {
-				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(Aplicacion.class.getResource("../vistas/actividades/editarActividadVista.fxml"));
-				StackPane vistaRegistro = (StackPane) loader.load();
-				Scene scene = new Scene(vistaRegistro);
-				Stage dialogStage = new Stage();
-				dialogStage.setTitle("Editar cuestionario");
-				dialogStage.initModality(Modality.WINDOW_MODAL);
-				dialogStage.initOwner(Aplicacion.escenarioPrincipal);
-				dialogStage.setScene(scene);
-				// Acceso al controlador.
-				ControladorVistaEditarActividad miControlador = loader.getController();
-				miControlador.setEscenario(dialogStage);
-				miControlador.setProceso(proceso);
-				miControlador.setActividad(tablaActividades.getSelectionModel().getSelectedItem());
-				miControlador.actualizarCampos();
-				dialogStage.showAndWait();
-				if (miControlador.isOkClicked()) {
-					listadoActividades.set(posicion, miControlador.getActividadActualizada());
-					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividad actualizada");
-				}
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-			}
-		} else {
-			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
-		}
+	private void pulsadoEditarTarea() {
+//		int posicion = tablaTareas.getSelectionModel().getSelectedIndex();
+//		if (posicion >= 0) {
+//			try {
+//				FXMLLoader loader = new FXMLLoader();
+//				loader.setLocation(Aplicacion.class.getResource("../vistas/actividades/editarActividadVista.fxml"));
+//				StackPane vistaRegistro = (StackPane) loader.load();
+//				Scene scene = new Scene(vistaRegistro);
+//				Stage dialogStage = new Stage();
+//				dialogStage.setTitle("Editar cuestionario");
+//				dialogStage.initModality(Modality.WINDOW_MODAL);
+//				dialogStage.initOwner(Aplicacion.escenarioPrincipal);
+//				dialogStage.setScene(scene);
+//				// Acceso al controlador.
+//				ControladorVistaEditarTareas miControlador = loader.getController();
+//				miControlador.setEscenario(dialogStage);
+//				miControlador.setProceso(proceso);
+//				miControlador.setActividad(tablaTareas.getSelectionModel().getSelectedItem());
+//				miControlador.actualizarCampos();
+//				dialogStage.showAndWait();
+//				if (miControlador.isOkClicked()) {
+//					listadoTareas.set(posicion, miControlador.getActividadActualizada());
+//					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividad actualizada");
+//				}
+//			} catch (IOException e) {
+//				System.out.println(e.getMessage());
+//			}
+//		} else {
+//			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
+//		}
 	}
 
 	@FXML
-	private void eliminarActividad() {
-		if (tablaActividades.getSelectionModel().getSelectedIndex() >= 0) {
+	private void eliminarTarea() {
+		if (tablaTareas.getSelectionModel().getSelectedIndex() >= 0) {
 			if (Aplicacion.mostrarMensajeRespuesta(rootPane, rootBorderPane,
-					"Estas seguro que deseas eliminar la actividad")) {
-				int seleccion = tablaActividades.getSelectionModel().getSelectedIndex();
+					"Estas seguro que deseas eliminar la tarea")) {
+				int seleccion = tablaTareas.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
-					Actividad actividad = tablaActividades.getSelectionModel().getSelectedItem();
-					listadoActividades.remove(seleccion);
+					Tarea tarea = tablaTareas.getSelectionModel().getSelectedItem();
+					listadoTareas.remove(seleccion);
 					try {
 						singleton.eliminarActividad(proceso, actividad);
-						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividad eliminada");
+						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Tarea eliminada");
 					} catch (ActividadNoExisteException e) {
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, e.getMessage());
 					}
@@ -241,14 +249,4 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
 		}
 	}
-	
-	@FXML
-    private void pulsadoVerTarea() {
-		int posicion = tablaActividades.getSelectionModel().getSelectedIndex();
-		if (posicion >= 0) {
-			Aplicacion.mostrarVistaPrincipalTareas(proceso, tablaActividades.getSelectionModel().getSelectedItem());
-		} else {
-			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
-		}
-    }
 }

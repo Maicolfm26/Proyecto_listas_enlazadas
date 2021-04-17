@@ -1,7 +1,10 @@
 package co.edu.uniquindio.listas.model;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
+import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
+import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
 import co.edu.uniquindio.listas.model.listas.Cola;
 
 public class Actividad implements Serializable {
@@ -11,10 +14,10 @@ public class Actividad implements Serializable {
 	private String descripcion;
 	private Requerida requerida;
 	private Cola<Tarea> listaTareas;
-	
+
 	public Actividad() {
 	}
-	
+
 	public Actividad(String nombre, String descripcion, Requerida requeria) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
@@ -83,5 +86,100 @@ public class Actividad implements Serializable {
 	public String toString() {
 		return nombre;
 	}
-	
+
+	public void agregarTarea(Tarea tarea, int posicion, int opcion)
+			throws DosTareasOpcionalesException, PosicionInvalidaTareaException {
+		switch (opcion) {
+		case 0:
+			if (listaTareas.getTamanio() != 0) {
+				if (listaTareas.getNodoUltimo().getRequerida() == Requerida.OBLIGATORIA
+						|| tarea.getRequerida() == Requerida.OBLIGATORIA) {
+					listaTareas.agregar(tarea);
+				} else {
+					throw new DosTareasOpcionalesException("No se pueden crear dos tareas opcionales seguidas");
+				}
+			} else {
+				listaTareas.agregar(tarea);
+			}
+			break;
+		case 1:
+			if (posicion == 1) {
+				Tarea tareaSiguinte = listaTareas.getNodoPrimero();
+				if (tareaSiguinte.getRequerida() == Requerida.OBLIGATORIA
+						|| tarea.getRequerida() == Requerida.OBLIGATORIA) {
+					try {
+						listaTareas.agregarPosicion(tarea, posicion);
+					} catch (Exception e) {
+						throw new PosicionInvalidaTareaException(e.getMessage());
+					}
+				} else {
+					throw new DosTareasOpcionalesException("No se pueden crear dos tareas opcionales seguidas");
+				}
+			} else if (posicion == listaTareas.getTamanio() + 1) {
+				Tarea tareaAnterior = listaTareas.getNodoUltimo();
+				if (tareaAnterior.getRequerida() == Requerida.OBLIGATORIA
+						|| tarea.getRequerida() == Requerida.OBLIGATORIA) {
+					try {
+						listaTareas.agregarPosicion(tarea, posicion);
+					} catch (Exception e) {
+						throw new PosicionInvalidaTareaException(e.getMessage());
+					}
+				} else {
+					throw new DosTareasOpcionalesException("No se pueden crear dos tareas opcionales seguidas");
+				}
+			} else {
+				if (posicion > listaTareas.getTamanio()) {
+					throw new PosicionInvalidaTareaException("Posicion invalida");
+				}
+				int contador = 1;
+				Iterator<Tarea> it = listaTareas.iterator();
+				Tarea tareaActual = null;
+				Tarea tareaAnterior = null;
+				while (it.hasNext()) {
+					tareaActual = it.next();
+					if (contador == posicion) {
+						if (tareaActual.getRequerida() == Requerida.OBLIGATORIA
+								&& tareaAnterior.getRequerida() == Requerida.OBLIGATORIA
+								|| tarea.getRequerida() == Requerida.OBLIGATORIA) {
+							try {
+								listaTareas.agregarPosicion(tarea, posicion);
+								break;
+							} catch (Exception e) {
+								throw new PosicionInvalidaTareaException(e.getMessage());
+							}
+						} else {
+							throw new DosTareasOpcionalesException("No se pueden crear dos tareas opcionales seguidas");
+						}
+					}
+					tareaAnterior = tareaActual;
+					contador++;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+	}
+
+	public int getTiempoMin() {
+		int acomulador = 0;
+		Iterator<Tarea> it = listaTareas.iterator();
+		while (it.hasNext()) {
+			Tarea tarea = it.next();
+			if (tarea.getRequerida() == Requerida.OBLIGATORIA) {
+				acomulador += tarea.getDuracion();
+			}
+		}
+		return acomulador;
+	}
+
+	public int getTiempoMax() {
+		int acomulador = 0;
+		Iterator<Tarea> it = listaTareas.iterator();
+		while (it.hasNext()) {
+			Tarea tarea = it.next();
+			acomulador += tarea.getDuracion();
+		}
+		return acomulador;
+	}
 }

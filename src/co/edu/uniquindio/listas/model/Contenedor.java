@@ -6,9 +6,12 @@ import java.util.Iterator;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
+import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
+import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
 import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
+import co.edu.uniquindio.listas.model.listas.Cola;
 import co.edu.uniquindio.listas.model.listas.ListaDoble;
 import co.edu.uniquindio.listas.model.listas.ListaSimple;
 
@@ -80,5 +83,13 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 	
 	public void editarActividad(Proceso proceso, Actividad actividad, Actividad actividadActualizada) throws ActividadNoExisteException, YaExisteActividadException {
 		obtenerProceso(proceso).editarActividad(actividad, actividadActualizada);
+	}
+	
+	public Cola<Tarea> getTareas(Proceso proceso, Actividad actividad) {
+		return obtenerProceso(proceso).getTareas(actividad);
+	}
+	
+	public void agregarTarea(Proceso proceso, Actividad actividad, Tarea tarea, int posicion, int opcion) throws DosTareasOpcionalesException, PosicionInvalidaTareaException {
+		obtenerProceso(proceso).agregarTarea(actividad, tarea, posicion, opcion);
 	}
 }
