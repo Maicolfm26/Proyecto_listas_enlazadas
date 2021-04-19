@@ -97,4 +97,8 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 	public void eliminarTarea(Proceso proceso, Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
 		obtenerProceso(proceso).eliminarTarea(actividad, tarea);
 	}
+	
+	public void editarTarea(Proceso proceso, Actividad actividad, Tarea tarea, Tarea tareaActualizada) throws DosTareasOpcionalesException {
+		obtenerProceso(proceso).editarTarea(actividad, tarea, tareaActualizada);
+	}
 }

@@ -198,35 +198,36 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 
 	@FXML
 	private void pulsadoEditarTarea() {
-//		int posicion = tablaTareas.getSelectionModel().getSelectedIndex();
-//		if (posicion >= 0) {
-//			try {
-//				FXMLLoader loader = new FXMLLoader();
-//				loader.setLocation(Aplicacion.class.getResource("../vistas/actividades/editarActividadVista.fxml"));
-//				StackPane vistaRegistro = (StackPane) loader.load();
-//				Scene scene = new Scene(vistaRegistro);
-//				Stage dialogStage = new Stage();
-//				dialogStage.setTitle("Editar cuestionario");
-//				dialogStage.initModality(Modality.WINDOW_MODAL);
-//				dialogStage.initOwner(Aplicacion.escenarioPrincipal);
-//				dialogStage.setScene(scene);
-//				// Acceso al controlador.
-//				ControladorVistaEditarTareas miControlador = loader.getController();
-//				miControlador.setEscenario(dialogStage);
-//				miControlador.setProceso(proceso);
-//				miControlador.setActividad(tablaTareas.getSelectionModel().getSelectedItem());
-//				miControlador.actualizarCampos();
-//				dialogStage.showAndWait();
-//				if (miControlador.isOkClicked()) {
-//					listadoTareas.set(posicion, miControlador.getActividadActualizada());
-//					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividad actualizada");
-//				}
-//			} catch (IOException e) {
-//				System.out.println(e.getMessage());
-//			}
-//		} else {
-//			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
-//		}
+		int posicion = tablaTareas.getSelectionModel().getSelectedIndex();
+		if (posicion >= 0) {
+			try {
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(Aplicacion.class.getResource("../vistas/tareas/editarTareaVista.fxml"));
+				StackPane vistaRegistro = (StackPane) loader.load();
+				Scene scene = new Scene(vistaRegistro);
+				Stage dialogStage = new Stage();
+				dialogStage.setTitle("Editar tarea");
+				dialogStage.initModality(Modality.WINDOW_MODAL);
+				dialogStage.initOwner(Aplicacion.escenarioPrincipal);
+				dialogStage.setScene(scene);
+				// Acceso al controlador.
+				ControladorVistaEditarTareas miControlador = loader.getController();
+				miControlador.setEscenario(dialogStage);
+				miControlador.setProceso(proceso);
+				miControlador.setActividad(actividad);
+				miControlador.setTarea(tablaTareas.getSelectionModel().getSelectedItem());
+				miControlador.actualizarCampos();
+				dialogStage.showAndWait();
+				if (miControlador.isOkClicked()) {
+					listadoTareas.set(posicion, miControlador.getTareaActualizada());
+					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Tarea actualizada");
+				}
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+			}
+		} else {
+			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna tarea");
+		}
 	}
 
 	@FXML

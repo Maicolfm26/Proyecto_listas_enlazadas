@@ -143,6 +143,9 @@ public class Cola<T> implements Iterable<T>, Serializable {
 			while (aux != null) {
 				if (contador == posicion) {
 					anterior.setSiguienteNodo(aux.getSiguienteNodo());
+					if(contador == tamanio) {
+						nodoUltimo = anterior;
+					}
 					tamanio--;
 				}
 
@@ -153,6 +156,27 @@ public class Cola<T> implements Iterable<T>, Serializable {
 		}
 		if(tamanio == 0) {
 			nodoPrimero = nodoUltimo = null;
+		}
+	}
+	
+	public void editar(int indice, T valor) {
+		Nodo<T> nodo = new Nodo<T>(valor);
+		Nodo<T> aux = nodoPrimero;
+		Nodo<T> nodoAnterior = null;
+		int contador = 0;
+		while(aux != null) {
+			if(contador == indice) {
+				nodo.setSiguienteNodo(aux.getSiguienteNodo());
+				if(nodoAnterior == null) {
+					nodoPrimero = nodo;
+				} else {
+					nodoAnterior.setSiguienteNodo(nodo);
+					nodo.setSiguienteNodo(aux.getSiguienteNodo());
+				}	
+			}
+			nodoAnterior = aux;
+			aux = aux.getSiguienteNodo();
+			contador++;
 		}
 	}
 

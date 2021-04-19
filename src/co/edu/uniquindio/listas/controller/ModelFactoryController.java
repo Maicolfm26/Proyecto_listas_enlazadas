@@ -94,4 +94,8 @@ public class ModelFactoryController {
 	public void eliminarTarea(Proceso proceso, Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
 		contenedor.eliminarTarea(proceso, actividad, tarea);
 	}
+	
+	public void editarTarea(Proceso proceso, Actividad actividad, Tarea tarea, Tarea tareaActualizada) throws DosTareasOpcionalesException {
+		contenedor.editarTarea(proceso, actividad, tarea, tareaActualizada);
+	}
 }

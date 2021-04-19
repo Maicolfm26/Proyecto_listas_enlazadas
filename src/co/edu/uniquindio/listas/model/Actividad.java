@@ -183,20 +183,21 @@ public class Actividad implements Serializable {
 		}
 		return acomulador;
 	}
-	
+
 	public void eliminarTarea(Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
 		Iterator<Tarea> it = listaTareas.iterator();
 		boolean eliminado = false;
 		Tarea tareaActual = null;
 		Tarea tareaAnterior = null;
 		int contador = 0;
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			tareaActual = it.next();
-			if(tareaActual.equals(tarea)) {
-				if(tareaAnterior != null) {
-					if(it.hasNext()) {
+			if (tareaActual.equals(tarea)) {
+				if (tareaAnterior != null) {
+					if (it.hasNext()) {
 						Tarea tareaSiguiente = it.next();
-						if(tareaSiguiente.getRequerida() == Requerida.OBLIGATORIA || tareaAnterior.getRequerida() == Requerida.OBLIGATORIA) {
+						if (tareaSiguiente.getRequerida() == Requerida.OBLIGATORIA
+								|| tareaAnterior.getRequerida() == Requerida.OBLIGATORIA) {
 							listaTareas.eliminar(contador);
 							eliminado = true;
 							break;
@@ -204,7 +205,8 @@ public class Actividad implements Serializable {
 							throw new DosTareasOpcionalesException("No pueden haber dos tareas opcionales seguidas");
 						}
 					} else {
-						if(tareaAnterior.getRequerida() == Requerida.OBLIGATORIA || tareaActual.getRequerida() == Requerida.OBLIGATORIA) {
+						if (tareaAnterior.getRequerida() == Requerida.OBLIGATORIA
+								|| tareaActual.getRequerida() == Requerida.OBLIGATORIA) {
 							listaTareas.eliminar(contador);
 							eliminado = true;
 							break;
@@ -221,8 +223,53 @@ public class Actividad implements Serializable {
 			tareaAnterior = tareaActual;
 			contador++;
 		}
-		if(!eliminado) {
+		if (!eliminado) {
 			throw new TareaNoExisteException("No se a econtrado la tarea a eliminar");
+		}
+	}
+
+	public void editarTarea(Tarea tarea, Tarea tareaActualizada) throws DosTareasOpcionalesException {
+		Iterator<Tarea> it = listaTareas.iterator();
+		Tarea tareaAnterior = null;
+		int contador = 0;
+		while (it.hasNext()) {
+			Tarea tareaActual = it.next();
+			if (tarea.equals(tareaActual)) {
+				if (tareaAnterior == null) {
+					if (it.next().getRequerida() == Requerida.OBLIGATORIA
+							|| tareaActualizada.getRequerida() == Requerida.OBLIGATORIA) {
+						listaTareas.editar(contador, tareaActualizada);
+						break;
+					} else {
+						throw new DosTareasOpcionalesException("No pueden haber dos tareas opcionales seguidas");
+					}
+				} else {
+					Tarea tareaS = null;
+					if(it.hasNext()) {
+						tareaS = it.next();
+					}
+					if (tareaS != null) {
+						if (tareaAnterior.getRequerida() == Requerida.OBLIGATORIA
+								&& tareaS.getRequerida() == Requerida.OBLIGATORIA
+								|| tareaActualizada.getRequerida() == Requerida.OBLIGATORIA) {
+							listaTareas.editar(contador, tareaActualizada);
+							break;
+						} else {
+							throw new DosTareasOpcionalesException("No pueden haber dos tareas opcionales seguidas");
+						}
+					} else {
+						if (tareaAnterior.getRequerida() == Requerida.OBLIGATORIA
+								|| tareaActualizada.getRequerida() == Requerida.OBLIGATORIA) {
+							listaTareas.editar(contador, tareaActualizada);
+							break;
+						} else {
+							throw new DosTareasOpcionalesException("No pueden haber dos tareas opcionales seguidas");
+						}
+					}
+				}
+			}
+			tareaAnterior = tareaActual;
+			contador++;
 		}
 	}
 }

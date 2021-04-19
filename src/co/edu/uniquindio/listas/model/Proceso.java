@@ -97,7 +97,11 @@ public class Proceso implements Serializable {
 				break;
 			case 2:
 				try {
-					listaActividades.agregarReferencia(actividad, ultimaCreada);
+					if(ultimaCreada == null) {
+						listaActividades.agregarfinal(actividad);
+					} else {
+						listaActividades.agregarReferencia(actividad, ultimaCreada);
+					}
 				} catch (Exception e) {
 					throw new ActividadNoExisteException(e.getMessage());
 				}
@@ -114,6 +118,9 @@ public class Proceso implements Serializable {
 	public void eliminarActividad(Actividad actividad) throws ActividadNoExisteException {
 		try {
 			listaActividades.eliminar(actividad);
+			if(actividad.equals(ultimaCreada)) {
+				ultimaCreada = null;
+			}
 		} catch (Exception e) {
 			throw new ActividadNoExisteException("La actividad no existe");
 		}
@@ -176,5 +183,9 @@ public class Proceso implements Serializable {
 	
 	public void eliminarTarea(Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
 		obtenerActividad(actividad).eliminarTarea(tarea);
+	}
+	
+	public void editarTarea(Actividad actividad, Tarea tarea, Tarea tareaACtualizada) throws DosTareasOpcionalesException {
+		obtenerActividad(actividad).editarTarea(tarea, tareaACtualizada);
 	}
 }
