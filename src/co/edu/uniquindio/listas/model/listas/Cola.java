@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.sun.org.apache.bcel.internal.generic.ANEWARRAY;
+
 public class Cola<T> implements Iterable<T>, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -37,23 +39,60 @@ public class Cola<T> implements Iterable<T>, Serializable {
 		return tamanio;
 	}
 
-	public void agregarPosicion(T valorNodo, int posicion) throws Exception {
-		Nodo<T> nodo = new Nodo<>(valorNodo);
-		
-		if (posicion == tamanio + 1) {
-			nodoUltimo.setSiguienteNodo(nodo);
-			nodoUltimo = nodo;
-		} else if (posicion < tamanio) {
-			Nodo<T> aux = nodoPrimero;
-			int contador = 0;
-			while (aux != null) {
-				if (contador == posicion - 1) {
-					Nodo<T> siguiente = aux.getSiguienteNodo();
-					aux.setSiguienteNodo(nodo);
-					nodo.setSiguienteNodo(siguiente);
-					break;
+	private Nodo<T> obtenerNodo(int indice) {
+
+		if (indice >= 0 && indice < tamanio) {
+
+			Nodo<T> nodo = nodoPrimero;
+
+			for (int i = 0; i < indice; i++) {
+				nodo = nodo.getSiguienteNodo();
+			}
+
+			return nodo;
+		}
+
+		return null;
+	}
+
+	// Verificar si indice es valido
+	private boolean indiceValido(int indice) {
+		if (indice >= 0 && indice <= tamanio) {
+			return true;
+		}
+		throw new RuntimeException("Índice no válido");
+	}
+
+	// Agregar al inicio de la lista
+	public void agregarInicio(T valorNodo) {
+
+		Nodo<T> nuevoNodo = new Nodo<>(valorNodo);
+
+		if (estaVacia()) {
+			nodoPrimero = nodoUltimo = nuevoNodo;
+		} else {
+			nuevoNodo.setSiguienteNodo(nodoPrimero);
+			nodoPrimero = nuevoNodo;
+		}
+		tamanio++;
+	}
+
+	public void agregarPosicion(T dato, int indice) throws Exception {
+
+		if (indiceValido(indice)) {
+
+			if (indice == 0) {
+				agregarInicio(dato);
+			} else {
+				Nodo<T> nuevo = new Nodo<>(dato);
+				Nodo<T> anterior = obtenerNodo(indice-1);
+
+				nuevo.setSiguienteNodo(anterior.getSiguienteNodo());
+				anterior.setSiguienteNodo(nuevo);
+				if(indice == tamanio) {
+					nodoUltimo = nuevo;
 				}
-				aux = aux.getSiguienteNodo();
+				tamanio++;
 			}
 		} else {
 			throw new Exception("Posicion invalida");
@@ -76,15 +115,45 @@ public class Cola<T> implements Iterable<T>, Serializable {
 		System.out.println();
 	}
 
-	public void eliminar(T dato) {
+	public void eliminar() {
 		Nodo<T> nodo = nodoPrimero;
 
 		if (!(nodo == null)) {
 			nodoPrimero = nodo.getSiguienteNodo();
+			tamanio--;
+			if(tamanio == 0) {
+				nodoUltimo = null;
+			}
 		} else {
 			System.out.println("La cola esta vacía.");
 		}
 
+	}
+
+	public void eliminar(int posicion) {
+		int contador = 0;
+		Nodo<T> nodo = nodoPrimero;
+
+		if (posicion == 0 && nodoPrimero != null) {
+			nodoPrimero = nodo.getSiguienteNodo();
+			tamanio--;
+		} else {
+			Nodo<T> aux = nodoPrimero;
+			Nodo<T> anterior = null;
+			while (aux != null) {
+				if (contador == posicion) {
+					anterior.setSiguienteNodo(aux.getSiguienteNodo());
+					tamanio--;
+				}
+
+				contador++;
+				anterior = aux;
+				aux = aux.getSiguienteNodo();
+			}
+		}
+		if(tamanio == 0) {
+			nodoPrimero = nodoUltimo = null;
+		}
 	}
 
 	public Collection<T> creadorTablas() {
@@ -130,6 +199,10 @@ public class Cola<T> implements Iterable<T>, Serializable {
 			nodo = nodo.getSiguienteNodo();
 			posicion++;
 			return valor;
+		}
+
+		public void remove() {
+			eliminar(posicion - 1);
 		}
 
 		/**

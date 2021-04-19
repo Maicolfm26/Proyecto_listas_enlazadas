@@ -142,7 +142,7 @@ public class ControladorVistaGuardarTareas implements Initializable {
 		posicion = Aplicacion.mostrarMensajeCampo(rootPane, rootAnchorPane, "Ingrese la posicion");
 		if (posicion != -1) {
 			try {
-				singleton.agregarTarea(proceso, actividad, tarea, posicion, 1);
+				singleton.agregarTarea(proceso, actividad, tarea, posicion-1, 1);
 				okClicked = true;
 				dialogStageGuardar.close();
 			} catch (DosTareasOpcionalesException | PosicionInvalidaTareaException e) {

@@ -11,6 +11,8 @@ import com.jfoenix.controls.JFXTextField;
 import co.edu.uniquindio.listas.aplicacion.Aplicacion;
 import co.edu.uniquindio.listas.controller.ModelFactoryController;
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
+import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
+import co.edu.uniquindio.listas.exceptions.TareaNoExisteException;
 import co.edu.uniquindio.listas.model.Actividad;
 import co.edu.uniquindio.listas.model.Proceso;
 import co.edu.uniquindio.listas.model.Requerida;
@@ -235,18 +237,19 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 				int seleccion = tablaTareas.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
 					Tarea tarea = tablaTareas.getSelectionModel().getSelectedItem();
-					listadoTareas.remove(seleccion);
+					
 					try {
-						singleton.eliminarActividad(proceso, actividad);
+						singleton.eliminarTarea(proceso, actividad, tarea);
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Tarea eliminada");
-					} catch (ActividadNoExisteException e) {
+						listadoTareas.remove(seleccion);
+					} catch (TareaNoExisteException | DosTareasOpcionalesException e) {
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, e.getMessage());
 					}
 					
 				}
 			}
 		} else {
-			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
+			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna tarea");
 		}
 	}
 }

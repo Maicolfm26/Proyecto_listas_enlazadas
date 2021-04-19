@@ -9,6 +9,7 @@ import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
 import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.exceptions.TareaNoExisteException;
 import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
 import co.edu.uniquindio.listas.model.listas.Cola;
@@ -91,5 +92,9 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 	
 	public void agregarTarea(Proceso proceso, Actividad actividad, Tarea tarea, int posicion, int opcion) throws DosTareasOpcionalesException, PosicionInvalidaTareaException {
 		obtenerProceso(proceso).agregarTarea(actividad, tarea, posicion, opcion);
+	}
+	
+	public void eliminarTarea(Proceso proceso, Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
+		obtenerProceso(proceso).eliminarTarea(actividad, tarea);
 	}
 }

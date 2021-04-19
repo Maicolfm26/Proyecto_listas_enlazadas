@@ -7,6 +7,7 @@ import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
 import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.exceptions.TareaNoExisteException;
 import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
 import co.edu.uniquindio.listas.model.listas.Cola;
@@ -171,5 +172,9 @@ public class Proceso implements Serializable {
 			acomulador += actividad.getTiempoMax();
 		}
 		return acomulador;
+	}
+	
+	public void eliminarTarea(Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
+		obtenerActividad(actividad).eliminarTarea(tarea);
 	}
 }

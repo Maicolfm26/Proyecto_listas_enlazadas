@@ -7,6 +7,7 @@ import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
 import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
 import co.edu.uniquindio.listas.exceptions.ProcesoNoExisteException;
+import co.edu.uniquindio.listas.exceptions.TareaNoExisteException;
 import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.exceptions.YaExisteProcesoException;
 import co.edu.uniquindio.listas.model.Actividad;
@@ -88,5 +89,9 @@ public class ModelFactoryController {
 	
 	public void agregarTarea(Proceso proceso, Actividad actividad, Tarea tarea, int posicion, int opcion) throws DosTareasOpcionalesException, PosicionInvalidaTareaException {
 		contenedor.agregarTarea(proceso, actividad, tarea, posicion, opcion);
+	}
+	
+	public void eliminarTarea(Proceso proceso, Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
+		contenedor.eliminarTarea(proceso, actividad, tarea);
 	}
 }
