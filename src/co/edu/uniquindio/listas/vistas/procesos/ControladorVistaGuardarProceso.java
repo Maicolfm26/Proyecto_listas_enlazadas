@@ -57,6 +57,7 @@ public class ControladorVistaGuardarProceso implements Initializable {
 	private void agregarProceso() {
 		if (idTextField.getText().isEmpty() || nombreTextField.getText().isEmpty()) {
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Debe llenar todos los campos");
+			rootPane.setEffect(null);
 		} else {
 			String id = idTextField.getText();
 			String nombre = nombreTextField.getText();
@@ -68,6 +69,7 @@ public class ControladorVistaGuardarProceso implements Initializable {
 			} catch (YaExisteProcesoException e) {
 				okClicked = false;
 				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+				rootPane.setEffect(null);
 			}
 		}
 	}

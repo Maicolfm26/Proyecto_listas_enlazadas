@@ -95,7 +95,13 @@ public class ModelFactoryController {
 		contenedor.eliminarTarea(proceso, actividad, tarea);
 	}
 	
+	public Contenedor getContenedor() {
+		return contenedor;
+	}
+
 	public void editarTarea(Proceso proceso, Actividad actividad, Tarea tarea, Tarea tareaActualizada) throws DosTareasOpcionalesException {
 		contenedor.editarTarea(proceso, actividad, tarea, tareaActualizada);
 	}
+	
+	
 }

@@ -116,7 +116,7 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 
 		// buscar el nodo previo
 		while (nodo != null) {
-			if (nodo.getValorNodo() == dato) {
+			if (nodo.getValorNodo().equals(dato)) {
 				encontrado = true;
 				break;
 			}
@@ -142,7 +142,7 @@ public class ListaSimple<T> implements Iterable<T>, Serializable {
 			tamanio--;
 			return dato;
 		}
-		throw new RuntimeException("El elemento no existe");
+		return null;
 	}
 
 	// Elimina el primer nodo de la lista

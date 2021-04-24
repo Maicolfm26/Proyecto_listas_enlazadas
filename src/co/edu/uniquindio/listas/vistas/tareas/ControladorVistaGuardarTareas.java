@@ -107,6 +107,7 @@ public class ControladorVistaGuardarTareas implements Initializable {
 		if (duracionTextField.getText().isEmpty() || descripcionTextField.getText().isEmpty()
 				|| requeridaGroup.getSelectedToggle() == null || formasAgregarComboBox.getSelectionModel().isEmpty()) {
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Debe llenar todos los campos");
+			rootPane.setEffect(null);
 		} else {
 			String descripcion = descripcionTextField.getText();
 
@@ -130,16 +131,19 @@ public class ControladorVistaGuardarTareas implements Initializable {
 					} catch (DosTareasOpcionalesException | PosicionInvalidaTareaException e) {
 						okClicked = false;
 						Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+						rootPane.setEffect(null);
 					}
 				}
 			} catch (NumberFormatException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Caracteres invalidos en campo de duración");
+				rootPane.setEffect(null);
 			}
 		}
 	}
 
 	private void mostrarCampo() {
 		posicion = Aplicacion.mostrarMensajeCampo(rootPane, rootAnchorPane, "Ingrese la posicion");
+		rootPane.setEffect(null);
 		if (posicion != -1) {
 			try {
 				singleton.agregarTarea(proceso, actividad, tarea, posicion-1, 1);
@@ -148,6 +152,7 @@ public class ControladorVistaGuardarTareas implements Initializable {
 			} catch (DosTareasOpcionalesException | PosicionInvalidaTareaException e) {
 				okClicked = false;
 				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+				rootPane.setEffect(null);
 			}
 		}
 	}

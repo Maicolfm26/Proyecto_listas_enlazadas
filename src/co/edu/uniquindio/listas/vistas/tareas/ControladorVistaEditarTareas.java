@@ -110,6 +110,7 @@ public class ControladorVistaEditarTareas implements Initializable {
 				|| requeridaGroup.getSelectedToggle() == null) {
 			dialogStage.show();
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Se deben llenar todos los campos");
+			rootPane.setEffect(null);
 		} else {
 			try {
 				int duracion = Integer.parseInt(duracionTextField.getText());
@@ -126,10 +127,12 @@ public class ControladorVistaEditarTareas implements Initializable {
 				} catch (DosTareasOpcionalesException e) {
 					okClicked = false;
 					Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+					rootPane.setEffect(null);
 				}
 			} catch (NumberFormatException e) {
 				okClicked = false;
 				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Formato incorrepto en el campo de duracion");
+				rootPane.setEffect(null);
 			}
 
 		}

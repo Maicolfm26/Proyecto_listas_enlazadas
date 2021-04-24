@@ -41,8 +41,8 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 		}
 	}
 
-	public void eliminarProceso(Proceso proceso) {
-		listaProcesos.eliminar(proceso);
+	public Proceso eliminarProceso(Proceso proceso) {
+		return listaProcesos.eliminar(proceso);
 	}
 
 	public void editarProceso(Proceso proceso, Proceso procesoActualizado) throws ProcesoNoExisteException, YaExisteProcesoException {

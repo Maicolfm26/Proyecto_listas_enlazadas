@@ -134,6 +134,7 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 				Aplicacion.mostrarVistaPrincipalProcesos();
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al cargar el archivo");
+				rootPane.setEffect(null);
 			}
 		}
 	}
@@ -152,6 +153,7 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 				singleton.guardarContenedor(ruta);
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al guardar el archivo");
+				rootPane.setEffect(null);
 			}
 		}
 
@@ -190,6 +192,7 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 					listadoTareas.add(miControlador.getTarea());
 				}
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Agregado correctamente");
+				rootPane.setEffect(null);
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -221,12 +224,14 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 				if (miControlador.isOkClicked()) {
 					listadoTareas.set(posicion, miControlador.getTareaActualizada());
 					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Tarea actualizada");
+					rootPane.setEffect(null);
 				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna tarea");
+			rootPane.setEffect(null);
 		}
 	}
 
@@ -235,6 +240,7 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 		if (tablaTareas.getSelectionModel().getSelectedIndex() >= 0) {
 			if (Aplicacion.mostrarMensajeRespuesta(rootPane, rootBorderPane,
 					"Estas seguro que deseas eliminar la tarea")) {
+				rootPane.setEffect(null);
 				int seleccion = tablaTareas.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
 					Tarea tarea = tablaTareas.getSelectionModel().getSelectedItem();
@@ -242,15 +248,18 @@ public class ControladorVistaPrincipalTareas implements Initializable {
 					try {
 						singleton.eliminarTarea(proceso, actividad, tarea);
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Tarea eliminada");
+						rootPane.setEffect(null);
 						listadoTareas.remove(seleccion);
 					} catch (TareaNoExisteException | DosTareasOpcionalesException e) {
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, e.getMessage());
+						rootPane.setEffect(null);
 					}
 					
 				}
 			}
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna tarea");
+			rootPane.setEffect(null);
 		}
 	}
 }

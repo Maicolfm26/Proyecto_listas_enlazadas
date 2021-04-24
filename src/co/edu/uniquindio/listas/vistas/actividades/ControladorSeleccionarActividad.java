@@ -1,9 +1,7 @@
 package co.edu.uniquindio.listas.vistas.actividades;
 
 import java.util.Iterator;
-
 import com.jfoenix.controls.JFXComboBox;
-
 import co.edu.uniquindio.listas.aplicacion.Aplicacion;
 import co.edu.uniquindio.listas.model.Actividad;
 import co.edu.uniquindio.listas.model.listas.ListaDoble;
@@ -56,6 +54,7 @@ public class ControladorSeleccionarActividad {
 	private void pulsadoSeleccionar() {
 		if(actividadesComboBox.getSelectionModel().isEmpty()) {
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Debe seleccionar una actividad");
+			rootPane.setEffect(null);
 		} else {
 			actividad = actividadesComboBox.getSelectionModel().getSelectedItem();
 			okClicked = true;

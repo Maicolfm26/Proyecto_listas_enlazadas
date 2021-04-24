@@ -97,6 +97,7 @@ public class ControladorVistaGuardarActividad implements Initializable {
 		if (nombreTextField.getText().isEmpty() || descripcionTextField.getText().isEmpty()
 				|| requeridaGroup.getSelectedToggle() == null || formasAgregarComboBox.getSelectionModel().isEmpty()) {
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Debe llenar todos los campos");
+			rootPane.setEffect(null);
 		} else {
 			String nombre = nombreTextField.getText();
 			String descripcion = descripcionTextField.getText();
@@ -108,11 +109,13 @@ public class ControladorVistaGuardarActividad implements Initializable {
 			}
 
 			tipo = formasAgregarComboBox.getSelectionModel().getSelectedIndex();
-
+			
 			if (tipo == 1) {
 				mostrarSeleccionar();
+				tipo = 1;
 			} else {
 				try {
+					tipo = 0;
 					singleton.agregarActividad(proceso, actividad, null, tipo);
 					okClicked = true;
 					dialogStageGuardar.close();
@@ -149,6 +152,7 @@ public class ControladorVistaGuardarActividad implements Initializable {
 				} catch (YaExisteActividadException | ActividadNoExisteException e) {
 					okClicked = false;
 					Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+					rootPane.setEffect(null);
 				}
 			}
 		} catch (IOException e) {

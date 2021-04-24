@@ -97,7 +97,7 @@ public class Proceso implements Serializable {
 				break;
 			case 2:
 				try {
-					if(ultimaCreada == null) {
+					if (ultimaCreada == null) {
 						listaActividades.agregarfinal(actividad);
 					} else {
 						listaActividades.agregarReferencia(actividad, ultimaCreada);
@@ -118,7 +118,7 @@ public class Proceso implements Serializable {
 	public void eliminarActividad(Actividad actividad) throws ActividadNoExisteException {
 		try {
 			listaActividades.eliminar(actividad);
-			if(actividad.equals(ultimaCreada)) {
+			if (actividad.equals(ultimaCreada)) {
 				ultimaCreada = null;
 			}
 		} catch (Exception e) {
@@ -166,7 +166,9 @@ public class Proceso implements Serializable {
 		Iterator<Actividad> it = listaActividades.iterator();
 		while (it.hasNext()) {
 			Actividad actividad = it.next();
-			acomulador += actividad.getTiempoMin();
+			if(actividad.getRequerida() == Requerida.OBLIGATORIA) {
+				acomulador += actividad.getTiempoMin();
+			}
 		}
 		return acomulador;
 	}
@@ -180,12 +182,14 @@ public class Proceso implements Serializable {
 		}
 		return acomulador;
 	}
-	
-	public void eliminarTarea(Actividad actividad, Tarea tarea) throws TareaNoExisteException, DosTareasOpcionalesException {
+
+	public void eliminarTarea(Actividad actividad, Tarea tarea)
+			throws TareaNoExisteException, DosTareasOpcionalesException {
 		obtenerActividad(actividad).eliminarTarea(tarea);
 	}
-	
-	public void editarTarea(Actividad actividad, Tarea tarea, Tarea tareaACtualizada) throws DosTareasOpcionalesException {
+
+	public void editarTarea(Actividad actividad, Tarea tarea, Tarea tareaACtualizada)
+			throws DosTareasOpcionalesException {
 		obtenerActividad(actividad).editarTarea(tarea, tareaACtualizada);
 	}
 }

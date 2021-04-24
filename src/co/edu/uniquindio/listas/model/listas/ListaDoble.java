@@ -85,28 +85,34 @@ public class ListaDoble<T> implements Iterable<T>, Serializable {
 
 	public void agregarReferencia(T dato, T referencia) throws Exception {
 
+		boolean agregado = false;
 		if (tamanio == 0) {
 			agregarInicio(dato);
 		} else {
 			NodoDoble<T> aux = nodoPrimero;
 			NodoDoble<T> nuevo = null;
-			
+			int contador = 0;
 			while (aux != null) {
 				if (aux.getValorNodo().equals(referencia)) {
-					NodoDoble<T> siguiente = aux.getSiguienteNodo();
-					nuevo = new NodoDoble<>(dato);
-					aux.setSiguienteNodo(nuevo);
-					nuevo.setAnteriorNodo(aux);
-					nuevo.setSiguienteNodo(siguiente);
-					siguiente.setAnteriorNodo(nuevo);
+					if (contador == 0) {
+						agregarfinal(dato);
+					} else {
+						NodoDoble<T> siguiente = aux.getSiguienteNodo();
+						nuevo = new NodoDoble<>(dato);
+						aux.setSiguienteNodo(nuevo);
+						nuevo.setAnteriorNodo(aux);
+						nuevo.setSiguienteNodo(siguiente);
+						siguiente.setAnteriorNodo(nuevo);
+					}
+					agregado = true;
 					break;
 				}
+				contador++;
 				aux = aux.getSiguienteNodo();
 			}
-			
-			if(nuevo == null) {
-				throw new Exception("No existe la referencia");
 
+			if (!agregado) {
+				throw new Exception("No existe la referencia");
 			}
 		}
 	}
@@ -168,6 +174,20 @@ public class ListaDoble<T> implements Iterable<T>, Serializable {
 		}
 
 		System.out.println();
+	}
+
+	@Override
+	public String toString() {
+
+		NodoDoble<T> aux = nodoPrimero;
+		String cadena = "";
+
+		while (aux != null) {
+			cadena += aux.getValorNodo().toString() + " ";
+			aux = aux.getSiguienteNodo();
+		}
+
+		return cadena;
 	}
 
 	public void imprimirHaciaAtras() {

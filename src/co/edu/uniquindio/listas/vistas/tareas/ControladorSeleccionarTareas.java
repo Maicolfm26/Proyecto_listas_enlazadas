@@ -56,6 +56,7 @@ public class ControladorSeleccionarTareas {
 	private void pulsadoSeleccionar() {
 		if(actividadesComboBox.getSelectionModel().isEmpty()) {
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Debe seleccionar una actividad");
+			rootPane.setEffect(null);
 		} else {
 			actividad = actividadesComboBox.getSelectionModel().getSelectedItem();
 			okClicked = true;

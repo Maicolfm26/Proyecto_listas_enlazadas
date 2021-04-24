@@ -3,9 +3,7 @@ package co.edu.uniquindio.listas.vistas.actividades;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import javax.swing.text.TabableView;
-
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXDialogLayout;
@@ -60,6 +58,12 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 
 	@FXML
 	private TableColumn<Actividad, Requerida> requeridaColumn;
+	
+	@FXML
+    private TableColumn<Actividad, Integer> tiempoMinimoColumn;
+
+    @FXML
+    private TableColumn<Actividad, Integer> tiempoMaximoColumn;
 
 	@FXML
 	private JFXTextField buscarTextField;
@@ -83,6 +87,8 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 		nombreColumn.setCellValueFactory(new PropertyValueFactory<>("Nombre"));
 		descripcionColumn.setCellValueFactory(new PropertyValueFactory<>("Descripcion"));
 		requeridaColumn.setCellValueFactory(new PropertyValueFactory<>("Requerida"));
+		tiempoMinimoColumn.setCellValueFactory(new PropertyValueFactory<>("TiempoMin"));
+		tiempoMaximoColumn.setCellValueFactory(new PropertyValueFactory<>("TiempoMax"));
 		listadoActividades.addAll(singleton.getActividadesProceso(proceso).creadorTablas());
 		// 1. Wrap the ObservableList in a FilteredList (initially display all data).
 		FilteredList<Actividad> filteredData = new FilteredList<>(listadoActividades, p -> true);
@@ -124,6 +130,7 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 				Aplicacion.mostrarVistaPrincipalProcesos();
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al cargar el archivo");
+				rootPane.setEffect(null);
 			}
 		}
 	}
@@ -142,6 +149,7 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 				singleton.guardarContenedor(ruta);
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al guardar el archivo");
+				rootPane.setEffect(null);
 			}
 		}
 
@@ -180,6 +188,7 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 					listadoActividades.add(miControlador.getActividad());
 				}
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Agregado correctamente");
+				rootPane.setEffect(null);
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -210,12 +219,14 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 				if (miControlador.isOkClicked()) {
 					listadoActividades.set(posicion, miControlador.getActividadActualizada());
 					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividad actualizada");
+					rootPane.setEffect(null);
 				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
+			rootPane.setEffect(null);
 		}
 	}
 
@@ -224,6 +235,7 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 		if (tablaActividades.getSelectionModel().getSelectedIndex() >= 0) {
 			if (Aplicacion.mostrarMensajeRespuesta(rootPane, rootBorderPane,
 					"Estas seguro que deseas eliminar la actividad")) {
+				rootPane.setEffect(null);
 				int seleccion = tablaActividades.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
 					Actividad actividad = tablaActividades.getSelectionModel().getSelectedItem();
@@ -231,14 +243,17 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 					try {
 						singleton.eliminarActividad(proceso, actividad);
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividad eliminada");
+						rootPane.setEffect(null);
 					} catch (ActividadNoExisteException e) {
 						Aplicacion.mostrarMensaje(rootPane, rootBorderPane, e.getMessage());
+						rootPane.setEffect(null);
 					}
 					
 				}
 			}
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
+			rootPane.setEffect(null);
 		}
 	}
 	
@@ -249,6 +264,7 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 			Aplicacion.mostrarVistaPrincipalTareas(proceso, tablaActividades.getSelectionModel().getSelectedItem());
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ninguna actividad");
+			rootPane.setEffect(null);
 		}
     }
 }

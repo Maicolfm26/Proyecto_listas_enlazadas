@@ -110,6 +110,7 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 				listadoProcesos.addAll(singleton.getListadoProcesos().creadorTablas());
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al cargar el archivo");
+				rootPane.setEffect(null);
 			}
 		}
 	}
@@ -129,6 +130,7 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 				singleton.guardarContenedor(ruta);
 			} catch (IOException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Error al guardar el archivo");
+				rootPane.setEffect(null);
 			}
 		}
 
@@ -153,6 +155,7 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 			if (miControlador.isOkClicked()) {
 				listadoProcesos.add(miControlador.getProceso());
 				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Agregado correctamente");
+				rootPane.setEffect(null);
 			}
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -182,12 +185,14 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 				if (miControlador.isOkClicked()) {
 					listadoProcesos.set(posicion, miControlador.getProcesoActualizado());
 					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Proceso actualizado");
+					rootPane.setEffect(null);
 				}
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 			}
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
+			rootPane.setEffect(null);
 		}
 	}
 
@@ -196,16 +201,19 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 		if (tablaProcesos.getSelectionModel().getSelectedIndex() >= 0) {
 			if (Aplicacion.mostrarMensajeRespuesta(rootPane, rootBorderPane,
 					"Estas seguro que deseas eliminar el proceso")) {
+				rootPane.setEffect(null);
 				int seleccion = tablaProcesos.getSelectionModel().getSelectedIndex();
 				if (seleccion >= 0) {
 					Proceso proceso = tablaProcesos.getSelectionModel().getSelectedItem();
 					listadoProcesos.remove(seleccion);
 					singleton.eliminarProceso(proceso);
 					Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Proceso eliminado");
+					rootPane.setEffect(null);
 				}
 			}
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
+			rootPane.setEffect(null);
 		}
 	}
 
@@ -216,6 +224,7 @@ public class ControladorVistaPrincipalProcesos implements Initializable {
 			Aplicacion.mostrarVistaPrincipalActividades(tablaProcesos.getSelectionModel().getSelectedItem());
 		} else {
 			Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "No se ha seleccionado ningun proceso");
+			rootPane.setEffect(null);
 		}
 	}
 }

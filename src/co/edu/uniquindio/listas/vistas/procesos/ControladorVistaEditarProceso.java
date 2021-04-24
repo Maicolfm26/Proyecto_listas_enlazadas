@@ -81,6 +81,7 @@ public class ControladorVistaEditarProceso implements Initializable {
 		if (nombreTextField.getText().isEmpty() || idTextField.getText().isEmpty()) {
 			dialogStage.show();
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Se deben llenar todos los campos");
+			rootPane.setEffect(null);
 		} else {
 			String nombre = nombreTextField.getText();
 			String id = idTextField.getText();
@@ -91,6 +92,7 @@ public class ControladorVistaEditarProceso implements Initializable {
 				okClicked = true;
 			} catch (ProcesoNoExisteException | YaExisteProcesoException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+				rootPane.setEffect(null);
 			}
 		}
 	}

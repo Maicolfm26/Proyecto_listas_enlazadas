@@ -19,7 +19,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.listas.vistas.actividades.ControladorVistaPrincipalActividades">
+<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.listas.vistas.actividades.ControladorVistaPrincipalActividades">
    <children>
       <BorderPane fx:id="rootBorderPane" prefHeight="200.0" prefWidth="200.0">
          <top>
@@ -112,9 +112,11 @@
                   </JFXTextField>
                   <TableView fx:id="tablaActividades" prefHeight="460.0" prefWidth="425.0" stylesheets="@../estilos.css">
                     <columns>
-                      <TableColumn fx:id="nombreColumn" minWidth="-1.0" prefWidth="125.0" text="Nombre" />
-                      <TableColumn fx:id="descripcionColumn" minWidth="-1.0" prefWidth="125.0" text="Descripcion" />
-                        <TableColumn fx:id="requeridaColumn" minWidth="-1.0" prefWidth="125.0" text="Requerida" />
+                      <TableColumn fx:id="nombreColumn" minWidth="-1.0" prefWidth="90.0" text="Nombre" />
+                      <TableColumn fx:id="descripcionColumn" minWidth="-1.0" prefWidth="90.0" text="Descripcion" />
+                        <TableColumn fx:id="requeridaColumn" minWidth="-1.0" prefWidth="90.0" text="Requerida" />
+                        <TableColumn fx:id="tiempoMinimoColumn" minWidth="-1.0" prefWidth="90.0" text="T-Min" />
+                        <TableColumn fx:id="tiempoMaximoColumn" minWidth="-1.0" prefWidth="90.0" text="T-Max" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />

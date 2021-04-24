@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.listas.vistas.procesos.ControladorVistaPrincipalProcesos">
+<StackPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="411.0" prefWidth="665.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="co.edu.uniquindio.listas.vistas.procesos.ControladorVistaPrincipalProcesos">
    <children>
       <BorderPane fx:id="rootBorderPane" prefHeight="200.0" prefWidth="200.0">
          <top>
@@ -103,10 +103,10 @@
                   </JFXTextField>
                   <TableView fx:id="tablaProcesos" prefHeight="460.0" prefWidth="425.0" stylesheets="@../estilos.css">
                     <columns>
-                      <TableColumn fx:id="idColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="Id" />
-                      <TableColumn fx:id="nombreColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="Nombre" />
-                        <TableColumn fx:id="tiempoMinColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="T-Min" />
-                        <TableColumn fx:id="tiempoMaxColumn" minWidth="-1.0" prefWidth="96.0" resizable="false" text="T-Max" />
+                      <TableColumn fx:id="idColumn" minWidth="-1.0" prefWidth="110.0" resizable="false" text="Id" />
+                      <TableColumn fx:id="nombreColumn" minWidth="-1.0" prefWidth="110.0" resizable="false" text="Nombre" />
+                        <TableColumn fx:id="tiempoMinColumn" minWidth="-1.0" prefWidth="110.0" resizable="false" text="T-Min" />
+                        <TableColumn fx:id="tiempoMaxColumn" minWidth="-1.0" prefWidth="110.0" resizable="false" text="T-Max" />
                     </columns>
                      <VBox.margin>
                         <Insets bottom="20.0" left="20.0" right="20.0" />

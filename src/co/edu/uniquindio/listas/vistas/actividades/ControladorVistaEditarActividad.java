@@ -106,6 +106,7 @@ public class ControladorVistaEditarActividad implements Initializable {
 		if (nombreTextField.getText().isEmpty() || descripcionTextArea.getText().isEmpty() || requeridaGroup.getSelectedToggle() == null) {
 			dialogStage.show();
 			Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, "Se deben llenar todos los campos");
+			rootPane.setEffect(null);
 		} else {
 			String nombre = nombreTextField.getText();
 			String descripcion = descripcionTextArea.getText();
@@ -120,6 +121,7 @@ public class ControladorVistaEditarActividad implements Initializable {
 				okClicked = true;
 			} catch (ActividadNoExisteException | YaExisteActividadException e) {
 				Aplicacion.mostrarMensaje(rootPane, rootAnchorPane, e.getMessage());
+				rootPane.setEffect(null);
 			}
 		}
 	}
