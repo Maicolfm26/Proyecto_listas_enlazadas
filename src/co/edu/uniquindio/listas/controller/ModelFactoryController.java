@@ -3,6 +3,7 @@ package co.edu.uniquindio.listas.controller;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import co.edu.uniquindio.listas.exceptions.ActividadIgualesException;
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
 import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
@@ -103,5 +104,7 @@ public class ModelFactoryController {
 		contenedor.editarTarea(proceso, actividad, tarea, tareaActualizada);
 	}
 	
-	
+	public void cambiarActividades(Proceso proceso, Actividad actividad1, Actividad actividad2) throws ActividadIgualesException, ActividadNoExisteException {
+		contenedor.cambiarActividades(proceso, actividad1, actividad2);
+	}
 }

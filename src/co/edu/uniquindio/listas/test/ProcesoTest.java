@@ -8,12 +8,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import co.edu.uniquindio.listas.controller.ModelFactoryController;
+import co.edu.uniquindio.listas.exceptions.ActividadIgualesException;
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.YaExisteActividadException;
 import co.edu.uniquindio.listas.model.Actividad;
 import co.edu.uniquindio.listas.model.Contenedor;
 import co.edu.uniquindio.listas.model.Proceso;
 import co.edu.uniquindio.listas.model.Requerida;
+import co.edu.uniquindio.listas.model.Tarea;
+import co.edu.uniquindio.listas.model.listas.Cola;
 import co.edu.uniquindio.listas.model.listas.ListaDoble;
 
 public class ProcesoTest {
@@ -202,7 +205,7 @@ public class ProcesoTest {
 	public void testgetTiempoMin() {
 		ModelFactoryController singleton = ModelFactoryController.getInstance();
 		try {
-			String ruta = ContenedorTest.class.getResource("c2.dat").getPath();
+			String ruta = ContenedorTest.class.getResource("c1.dat").getPath();
 			ruta = ruta.replaceAll("%20", " ");
 			singleton.cargarContenedor(ruta);
 		} catch (IOException e) {
@@ -227,7 +230,7 @@ public class ProcesoTest {
 	public void testgetTiempoMax() {
 		ModelFactoryController singleton = ModelFactoryController.getInstance();
 		try {
-			String ruta = ContenedorTest.class.getResource("c2.dat").getPath();
+			String ruta = ContenedorTest.class.getResource("c1.dat").getPath();
 			ruta = ruta.replaceAll("%20", " ");
 			singleton.cargarContenedor(ruta);
 		} catch (IOException e) {
@@ -247,5 +250,72 @@ public class ProcesoTest {
 		assertEquals(37, actividades.obtener(0).getTiempoMax());
 		assertEquals(12, actividades.obtener(1).getTiempoMax());
 	}
+	
+	@Test 
+	public void testCambiarActividades() {
+		boolean cambiado = true;
+		ModelFactoryController singleton = ModelFactoryController.getInstance();
+		try {
+			String ruta = ContenedorTest.class.getResource("c2.dat").getPath();
+			ruta = ruta.replaceAll("%20", " ");
+			singleton.cargarContenedor(ruta);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		Contenedor contenedor = singleton.getContenedor();
+		
+		try {
+			contenedor.cambiarActividades(new Proceso("1", "1"), null, null);
+			cambiado = true;
+		} catch (ActividadIgualesException | ActividadNoExisteException e) {
+			cambiado = false;
+		}
+		
+		assertEquals(false, cambiado);
+		
+		try {
+			contenedor.cambiarActividades(new Proceso("1", "1"), new Actividad("1", "1", Requerida.OBLIGATORIA), null);
+			cambiado = true;
+		} catch (ActividadIgualesException | ActividadNoExisteException e) {
+			cambiado = false;
+		}
+		
+		assertEquals(false, cambiado);
+		
+		try {
+			contenedor.cambiarActividades(new Proceso("1", "1"), null, new Actividad("1", "1", Requerida.OBLIGATORIA));
+			cambiado = true;
+		} catch (ActividadIgualesException | ActividadNoExisteException e) {
+			cambiado = false;
+		}
+		
+		assertEquals(false, cambiado);
+		
+		try {
+			contenedor.cambiarActividades(new Proceso("1", "1"), new Actividad("1", "1", Requerida.OBLIGATORIA), new Actividad("1", "1", Requerida.OBLIGATORIA));
+			cambiado = true;
+		} catch (ActividadIgualesException | ActividadNoExisteException e) {
+			cambiado = false;
+		}
+		
+		assertEquals(false, cambiado);
+		
+		try {
+			contenedor.cambiarActividades(new Proceso("1", "1"), new Actividad("1", "1", Requerida.OBLIGATORIA), new Actividad("2", "2", Requerida.OBLIGATORIA));
+			cambiado = true;
+		} catch (ActividadIgualesException | ActividadNoExisteException e) {
+			cambiado = false;
+		}
+		
+		assertEquals(true, cambiado);
+		
+		Cola<Tarea> cola1 = contenedor.getTareas(new Proceso("1", "1"), new Actividad("1", "1", Requerida.OBLIGATORIA));
+		Cola<Tarea> cola2 = contenedor.getTareas(new Proceso("1", "1"), new Actividad("2", "2", Requerida.OBLIGATORIA));
+	
+		assertEquals("4 5 6 ", cola1.toString());
+		assertEquals("1 2 3 ", cola2.toString());
+		
+	}
 }

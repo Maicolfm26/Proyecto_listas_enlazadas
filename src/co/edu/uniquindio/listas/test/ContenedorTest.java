@@ -136,7 +136,7 @@ public class ContenedorTest {
 	public void testgetTiempoMin() {
 		ModelFactoryController singleton = ModelFactoryController.getInstance();
 		try {
-			String ruta = ContenedorTest.class.getResource("c2.dat").getPath();
+			String ruta = ContenedorTest.class.getResource("c1.dat").getPath();
 			ruta = ruta.replaceAll("%20", " ");
 			singleton.cargarContenedor(ruta);
 		} catch (IOException e) {
@@ -154,7 +154,7 @@ public class ContenedorTest {
 	public void testgetTiempoMax() {
 		ModelFactoryController singleton = ModelFactoryController.getInstance();
 		try {
-			String ruta = ContenedorTest.class.getResource("c2.dat").getPath();
+			String ruta = ContenedorTest.class.getResource("c1.dat").getPath();
 			ruta = ruta.replaceAll("%20", " ");
 			singleton.cargarContenedor(ruta);
 		} catch (IOException e) {

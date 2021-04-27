@@ -267,4 +267,33 @@ public class ControladorVistaPrincipalActividades implements Initializable {
 			rootPane.setEffect(null);
 		}
     }
+	
+	@FXML
+	private void pulsadoCambiar() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Aplicacion.class.getResource("../vistas/actividades/CambiarActividadesVista.fxml"));
+			StackPane vistaRegistro = (StackPane) loader.load();
+			Scene scene = new Scene(vistaRegistro);
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Cambiar actividades");
+			dialogStage.initModality(Modality.WINDOW_MODAL);
+			dialogStage.initOwner(Aplicacion.escenarioPrincipal);
+			dialogStage.setScene(scene);
+			// Acceso al controlador.
+			ControladorCambiarActividades miControlador = loader.getController();
+			miControlador.setEscenario(dialogStage);
+			miControlador.setProceso(proceso);
+			miControlador.actualizarCampos();
+			dialogStage.showAndWait();
+			if (miControlador.isOkClicked()) {
+				Aplicacion.mostrarMensaje(rootPane, rootBorderPane, "Actividades intercambiadas con exito");
+				rootPane.setEffect(null);
+				listadoActividades.clear();
+				listadoActividades.addAll(singleton.getActividadesProceso(proceso).creadorTablas());
+			}
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
 }

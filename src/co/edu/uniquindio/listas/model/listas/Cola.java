@@ -189,6 +189,20 @@ public class Cola<T> implements Iterable<T>, Serializable {
 		}
 		return lista;
 	}
+	
+	@Override
+	public String toString() {
+
+		Nodo<T> aux = nodoPrimero;
+		String cadena = "";
+
+		while (aux != null) {
+			cadena += aux.getValorNodo().toString() + " ";
+			aux = aux.getSiguienteNodo();
+		}
+
+		return cadena;
+	}
 
 	@Override
 	public Iterator<T> iterator() {

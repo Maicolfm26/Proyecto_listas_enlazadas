@@ -3,6 +3,7 @@ package co.edu.uniquindio.listas.model;
 import java.io.Serializable;
 import java.util.Iterator;
 
+import co.edu.uniquindio.listas.exceptions.ActividadIgualesException;
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
 import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
@@ -191,5 +192,22 @@ public class Proceso implements Serializable {
 	public void editarTarea(Actividad actividad, Tarea tarea, Tarea tareaACtualizada)
 			throws DosTareasOpcionalesException {
 		obtenerActividad(actividad).editarTarea(tarea, tareaACtualizada);
+	}
+	
+	public void cambiarActividades(Actividad actividad1, Actividad actividad2) throws ActividadIgualesException, ActividadNoExisteException {
+		if(actividad1 != null && actividad2 != null) {
+			if(!actividad1.equals(actividad2)) {
+				Actividad actividad3 = obtenerActividad(actividad1);
+				Actividad actividad4 = obtenerActividad(actividad2);
+				Cola<Tarea> listaTareas1 = actividad3.getListaTareas();
+				Cola<Tarea> listaTareas2 = actividad4.getListaTareas();
+				actividad3.setListaTareas(listaTareas2);
+				actividad4.setListaTareas(listaTareas1);
+			} else {
+				throw new ActividadIgualesException("Las actividades a cambiar son iguales");
+			}
+		} else {
+			throw new ActividadNoExisteException("Las actividades son nulas");
+		}
 	}
 }

@@ -96,6 +96,17 @@
                         <Font size="14.0" />
                      </font>
                   </JFXButton>
+                  <JFXButton onMouseClicked="#pulsadoCambiar" prefHeight="30.0" prefWidth="251.0" styleClass="button-red" stylesheets="@../estilos.css" text="Intercambiar" textFill="WHITE">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="15.0" right="15.0" />
+                     </VBox.margin>
+                     <graphic>
+                        <FontAwesomeIconView fill="WHITE" glyphName="REFRESH" size="15" />
+                     </graphic>
+                  </JFXButton>
                </children>
                <BorderPane.margin>
                   <Insets />

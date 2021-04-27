@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 
+import co.edu.uniquindio.listas.exceptions.ActividadIgualesException;
 import co.edu.uniquindio.listas.exceptions.ActividadNoExisteException;
 import co.edu.uniquindio.listas.exceptions.DosTareasOpcionalesException;
 import co.edu.uniquindio.listas.exceptions.PosicionInvalidaTareaException;
@@ -100,5 +101,9 @@ public class Contenedor extends RecursiveTreeObject<Contenedor> implements Seria
 	
 	public void editarTarea(Proceso proceso, Actividad actividad, Tarea tarea, Tarea tareaActualizada) throws DosTareasOpcionalesException {
 		obtenerProceso(proceso).editarTarea(actividad, tarea, tareaActualizada);
+	}
+	
+	public void cambiarActividades(Proceso proceso, Actividad actividad1, Actividad actividad2) throws ActividadIgualesException, ActividadNoExisteException {
+		obtenerProceso(proceso).cambiarActividades(actividad1, actividad2);
 	}
 }
